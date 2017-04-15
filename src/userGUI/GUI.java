@@ -40,7 +40,7 @@ public class GUI {
       mainFrame.add(statusLabel);
       mainFrame.setVisible(true);  
    }
-   private void showTextFieldDemo(){ 
+   public void showTextFieldDemo(){ 
 
       JLabel  namelabel= new JLabel("User CC Info: ", JLabel.RIGHT);
       final JTextField userText = new JTextField(16);    
@@ -83,5 +83,9 @@ public class GUI {
       controlPanel.add(parkButton);
       controlPanel.add(parkButton);
       mainFrame.setVisible(true);  
+   }
+   
+   public String toString(){
+	   return "did it work";
    }
 }
