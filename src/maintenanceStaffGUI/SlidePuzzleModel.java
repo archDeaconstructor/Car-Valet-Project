@@ -32,12 +32,12 @@ class SlidePuzzleModel {
 	public void reset() {
 		for (int r=0; r<ROWS-2; r++) {
 			for (int c=0; c<COLS; c++) {
-				_contents[r][c] = new Tile(r, c, "");
+				_contents[r][c] = new Tile(r, c, r + " " + c);
 			}
 		}
 		_contents[7][0] = new Tile(8, 0, null);
 		for (int c=1; c<COLS; c++) {
-			_contents[7][c] = new Tile(7, c, "");
+			_contents[7][c] = new Tile(7, c, 7 + " " + c);
 		}
 		_contents[8][0] = new Tile(8, 0, "Enter");
 		for (int c=1; c<COLS-1; c++) {
@@ -49,18 +49,16 @@ class SlidePuzzleModel {
 	//==================================================== moveTile
 	// Move a tile to empty position beside it, if possible.
 	// Return true if it was moved, false if not legal.
-	public boolean moveTile(int r, int c) {
-		//--- It's a legal move if the empty cell is next to it.
-		if(_contents[r][c-1].getValue() == null) {
-			exchangeTiles(r, c, r, c-1);
-		} else if(_contents[r][c+1].getValue() == null) {
-			exchangeTiles(r, c, r, c+1);
-		} else if(_contents[r-1][c].getValue() == null) {
-			exchangeTiles(r, c, r-1, c);
-		} else if(_contents[r+1][c].getValue() == null) {
-			exchangeTiles(r, c, r+1, c);
+	public boolean moveTileNorth(int emptyXLocation, int emptyYLocation) {
+		if(emptyYLocation - 1 > 0) {
+			exchangeTiles(emptyYLocation, emptyXLocation, emptyYLocation - 1, emptyXLocation);
+			emptyYLocation -= 1;
+			System.out.print("OK");
+			return true;
+		} else {
+			System.out.print("Lolwut");
+			return false;
 		}
-		return true;
 	}//end moveTile
 	
 	//=============================================== exchangeTiles

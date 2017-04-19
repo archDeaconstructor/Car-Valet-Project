@@ -24,33 +24,38 @@ class SlidePuzzleGUI extends JPanel {
 	//=============================================== instance variables
 	private GraphicsPanel    _puzzleGraphics;
 	private SlidePuzzleModel _puzzleModel = new SlidePuzzleModel();
+	int emptyXLocation = 0;
+	int emptyYLocation = 7;
 	//end instance variables
 	
 	
 	//====================================================== constructor
 	public SlidePuzzleGUI() {
 		//--- Create buttons and text fields
-		JButton northMove = new JButton("Move North");
-		northMove.addActionListener(new NewGameAction());
-		JButton southMove = new JButton("Move South");
-		southMove.addActionListener(new NewGameAction());
-		JButton westMove = new JButton("Move West");
-		westMove.addActionListener(new NewGameAction());
-		JButton eastMove= new JButton("Move East");
-		eastMove.addActionListener(new NewGameAction());
 		JButton getInfo= new JButton("Get Platform Info");
-		getInfo.addActionListener(new NewGameAction());
-		JTextArea infoDump = new JTextArea("EMPTY", 44, 80);
+		getInfo.addActionListener(new gettingInfo());
+		JButton moveNorth= new JButton("Move North");
+		moveNorth.addActionListener(new movingNorth());
+		JButton moveSouth= new JButton("Move South");
+		moveSouth.addActionListener(new movingSouth());
+		JButton moveWest= new JButton("Move West");
+		moveWest.addActionListener(new movingWest());
+		JButton moveEast= new JButton("Move East");
+		moveEast.addActionListener(new movingEast());
+		JButton emergencyShutdown= new JButton("EMERGENCY SHUTDOWN");
+		emergencyShutdown.addActionListener(new shuttingDown());
+		JTextArea infoDump = new JTextArea("EMPTY", 44, 60);
 		infoDump.setEditable(false);
 		
 		//--- Create control panel
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
-		controlPanel.add(northMove);
-		controlPanel.add(southMove);
-		controlPanel.add(westMove);
-		controlPanel.add(eastMove);
 		controlPanel.add(getInfo);
+		controlPanel.add(moveNorth);
+		controlPanel.add(moveSouth);
+		controlPanel.add(moveWest);
+		controlPanel.add(moveEast);
+		controlPanel.add(emergencyShutdown);
 		
 		//--- Create graphics panel
 		_puzzleGraphics = new GraphicsPanel();
@@ -75,7 +80,7 @@ class SlidePuzzleGUI extends JPanel {
 		private static final int ROWS = 9;
 		private static final int COLS = 8;
 		
-		private static final int CELL_SIZE = 120; // Pixels
+		private static final int CELL_SIZE = 90; // Pixels
 		private Font _biggerFont;
 		
 		
@@ -117,41 +122,82 @@ class SlidePuzzleGUI extends JPanel {
 			g.setColor(Color.black);
 			g.setFont(_biggerFont);
 			g.drawString(_puzzleModel.getValue(8, 0), 20, (8*CELL_SIZE)+(3*CELL_SIZE)/4);
+			// paints walls in bottom row
 			for (int c=1; c<COLS-1; c++) {
-				_contents[8][c] = new Tile(8, c, "------");
+				int x = c * CELL_SIZE;
+				String text = _puzzleModel.getValue(8, c);
+				if (text != null) {
+					g.setColor(Color.black);
+					g.fillRect(x+2, (8*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
+				}
 			}
-			_contents[8][7] = new Tile(8, 7, "Exit");
+			// paints EXIT square
+			g.setColor(Color.darkGray);
+			g.fillRect(7*CELL_SIZE, (8*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
+			g.setColor(Color.black);
+			g.setFont(_biggerFont);
+			g.drawString(_puzzleModel.getValue(8, 7), (7*CELL_SIZE)+20, (8*CELL_SIZE)+(3*CELL_SIZE)/4);
 		}//end paintComponent
-     
-     
-     //======================================== listener mousePressed
-     public void mousePressed(MouseEvent e) {
-         //--- map x,y coordinates into a row and col.
-         int col = e.getX()/CELL_SIZE;
-         int row = e.getY()/CELL_SIZE;
-         
-         if (!_puzzleModel.moveTile(row, col)) {
-             // moveTile moves tile if legal, else returns false.
-             Toolkit.getDefaultToolkit().beep();
-         }
-         
-         this.repaint();  // Show any updates to model.
-     }//end mousePressed
-     
-     
-     //========================================== ignore these events
-     public void mouseClicked (MouseEvent e) {}
-     public void mouseReleased(MouseEvent e) {}
-     public void mouseEntered (MouseEvent e) {}
-     public void mouseExited  (MouseEvent e) {}
- }//end class GraphicsPanel
- 
- ////////////////////////////////////////// inner class NewGameAction
- public class NewGameAction implements ActionListener {
-     public void actionPerformed(ActionEvent e) {
-         _puzzleModel.reset();
-         _puzzleGraphics.repaint();
-     }
- }//end inner class NewGameAction
-
+		
+		
+		//======================================== listener mousePressed
+		public void mousePressed(MouseEvent e) {
+			/*/--- map x,y coordinates into a row and col.
+			int col = e.getX()/CELL_SIZE;
+			int row = e.getY()/CELL_SIZE;
+			
+			if (!_puzzleModel.moveTileNorth()) {
+				// moveTile moves tile if legal, else returns false.
+				Toolkit.getDefaultToolkit().beep();
+			}
+			
+			this.repaint();  // Show any updates to model.
+		*/}//end mousePressed
+		
+		
+		//========================================== ignore these events
+		public void mouseClicked (MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
+		public void mouseEntered (MouseEvent e) {}
+		public void mouseExited  (MouseEvent e) {}
+	}//end class GraphicsPanel
+	
+	////////////////////////////////////////// inner class gettingInfo
+	public class gettingInfo implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			_puzzleModel.moveTileNorth(emptyXLocation, emptyYLocation);
+			_puzzleGraphics.repaint();
+		}
+	}//end inner class gettingInfo
+	public class movingNorth implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			_puzzleModel.moveTileNorth(emptyXLocation, emptyYLocation);
+			_puzzleGraphics.repaint();
+		}
+	}//end inner class movingNorth
+	public class movingSouth implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			_puzzleModel.moveTileNorth(emptyXLocation, emptyYLocation);
+			_puzzleGraphics.repaint();
+		}
+	}//end inner class movingSouth
+	public class movingWest implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			_puzzleModel.moveTileNorth(emptyXLocation, emptyYLocation);
+			_puzzleGraphics.repaint();
+		}
+	}//end inner class movingWest
+	public class movingEast implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			_puzzleModel.moveTileNorth(emptyXLocation, emptyYLocation);
+			_puzzleGraphics.repaint();
+		}
+	}//end inner class movingEast
+	public class shuttingDown implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			_puzzleModel.moveTileNorth(emptyXLocation, emptyYLocation);
+			_puzzleGraphics.repaint();
+		}
+	}//end inner class shuttingDown
+	
 }//end class SlidePuzzleGUI
