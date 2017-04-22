@@ -3,6 +3,8 @@ package userGUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Date;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 
@@ -45,6 +47,32 @@ public class GUI {
       mainFrame.add(statusLabel);
       mainFrame.setVisible(true);  
    }
+   
+   private static String returnString(String username){
+		//Scanner
+				Scanner sc = new Scanner(System.in);
+				int cardnumber =0;
+				//String username = new String();
+				//System.out.print("Please enter your card \n");
+				
+				//System.out.print(splitString());
+				
+				String test = sc.next();
+				String[] piece1 = test.split(Pattern.quote("^"));
+				
+				String cardNumber = piece1[0];
+				cardNumber = cardNumber.substring(2, 17);
+				
+				String FullName	  = piece1[1];
+				String[] piece2 = FullName.split(Pattern.quote("/"));
+				String firstName  = piece2[0];
+				String lastName   = piece2[1];
+				
+				String Value = "Thank you "+firstName+" "+lastName+"\nFor the sake of Demonstration "
+						+ "your card number is "+cardNumber;
+		return Value;
+	}
+   
    public void showTextFieldDemo(){ 
 
       JLabel  namelabel= new JLabel("User CC Info: ", JLabel.RIGHT);
@@ -85,8 +113,9 @@ public class GUI {
 
       JButton parkButton = new JButton("Continue");
       parkButton.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {     
-            String data = "Credit Card: " + userCC.getText(); 
+         public void actionPerformed(ActionEvent e) {
+        	 String data = "Credit Card: " + userCC.getText();
+//            String data = "Credit Card: " + returnString(userCC.getText()); 
             statusLabel.setText(data);
             controlPanel.remove(parkButton);
             controlPanel.add(fiveButton);
