@@ -90,9 +90,6 @@ class SlidePuzzleModel {
         }
     }//end moveTileEast.
     //causes the algorithm to pause
-    public void emergencyShutdown() {
-        
-    }//end emergencyShutdown.
 	public void checkEmpty(int r, int c, int rdelta, int cdelta) {
         int rNeighbor = r + rdelta;
         int cNeighbor = c + cdelta;

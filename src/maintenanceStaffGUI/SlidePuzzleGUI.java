@@ -24,7 +24,12 @@ class SlidePuzzleGUI extends JPanel {
 	//=============================================== instance variables
 	private GraphicsPanel    _puzzleGraphics;
 	private SlidePuzzleModel _puzzleModel = new SlidePuzzleModel();
-	JTextArea infoDump = new JTextArea("-", 44, 60);
+	String infoDumpText = ("-");
+	String infoDumpTextShutdown = (infoDumpText + "\nAVCPP is currently shut down. Press RESUME OPERATIONS"
+			+ " to resume normal operations.");
+	JTextArea infoDump = new JTextArea(infoDumpText, 44, 60);
+	JButton emergencyShutdown= new JButton("EMERGENCY SHUTDOWN");
+	private boolean stillRunning = true;
 	//end instance variables
 	
 	//====================================================== constructor
@@ -40,7 +45,6 @@ class SlidePuzzleGUI extends JPanel {
 		moveWest.addActionListener(new movingWest());
 		JButton moveEast= new JButton("Move East");
 		moveEast.addActionListener(new movingEast());
-		JButton emergencyShutdown= new JButton("EMERGENCY SHUTDOWN");
 		emergencyShutdown.addActionListener(new shuttingDown());
 		infoDump.setEditable(false);
 		
@@ -151,10 +155,18 @@ class SlidePuzzleGUI extends JPanel {
 			if (canGetInfo == true) {
 				int col = e.getX()/CELL_SIZE;
 	            int row = e.getY()/CELL_SIZE;
-	            infoDump.setText("Platform No: " + _puzzleModel.getValue(row, col) + "\nPosition: " +
-	    	            (col+1) + ", " + (row+1) + "\nCar Owner: " + _puzzleModel.getName(row, col) +
-	    	            "\nTime Due: " + _puzzleModel.getTime(row, col) + "\nTime Remaining: " + 
-	    	            _puzzleModel.getTimeRemaining(row, col));
+	            String setAsInfoDumpText = "Platform No: " + _puzzleModel.getValue(row, col) +
+	            		"\nPosition: " + (col+1) + ", " + (row+1) + "\nCar Owner: " +
+	            		_puzzleModel.getName(row, col) + "\nTime Due: " + _puzzleModel.getTime(row, col) +
+	            		"\nTime Remaining: " + _puzzleModel.getTimeRemaining(row, col);
+	            infoDumpText = setAsInfoDumpText;
+	            if (stillRunning == true) {
+	            	infoDump.setText(infoDumpText);
+	            } else {
+	            	String infoDumpTextShutdown = (infoDumpText + "\nAVCPP is currently shut down. "
+	            			+ "Press RESUME OPERATIONS to resume normal operations.");
+	            	infoDump.setText(infoDumpTextShutdown);
+	            }
 	            toggleGetInfo();
 			}
 		}//end mousePressed	
@@ -198,8 +210,19 @@ class SlidePuzzleGUI extends JPanel {
 	}//end inner class movingEast
 	public class shuttingDown implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			_puzzleModel.moveTileNorth();
-			_puzzleGraphics.repaint();
+			if (stillRunning == true) {
+				emergencyShutdown.setText("RESUME OPERATIONS");
+				String infoDumpTextShutdown = (infoDumpText + "\nAVCPP is currently shut down. Press RESUME"
+						+ " OPERATIONS to resume normal operations.");
+				infoDump.setText(infoDumpTextShutdown);
+				infoDump.setBackground(Color.ORANGE);
+				stillRunning = false;
+			} else {
+				emergencyShutdown.setText("EMERGENCY SHUTDOWN");
+				infoDump.setText(infoDumpText);
+				infoDump.setBackground(Color.WHITE);
+				stillRunning = true;
+			}
 		}
 	}//end inner class shuttingDown
 	
