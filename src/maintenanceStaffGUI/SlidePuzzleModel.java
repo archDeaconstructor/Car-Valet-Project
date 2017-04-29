@@ -7,12 +7,12 @@ import java.util.Calendar;
 
 /////////////////////////////////////////// class SlidePuzzleModel
 class SlidePuzzleModel {
-	private static final int ROWS = 9;
-	private static final int COLS = 8;
+	private static final int ROWS = 6;
+	private static final int COLS = 5;
 	Calendar calendar = Calendar.getInstance();
 	
 	private Tile[][] _contents;  // All tiles.
-	private Tile     _emptyTile = new Tile(7, 0, " ", "N/A"); // The empty space.
+	private Tile     _emptyTile = new Tile(4, 0, " ", "N/A"); // The empty space.
 	
 	
 	//================================================= constructor
@@ -26,6 +26,12 @@ class SlidePuzzleModel {
 	// Return the string to display at given row, col.
 	String getValue(int row, int col) {
 		return _contents[row][col].getValue();
+	}//end getValue
+	void addName(int row, int col) {
+		_contents[row][col].setName("A Car");
+	}//end getValue
+	void removeName(int row, int col) {
+		_contents[row][col].setName("Unoccupied");
 	}//end getValue
 	String getName(int row, int col) {
 		return _contents[row][col].getName();
@@ -48,16 +54,16 @@ class SlidePuzzleModel {
 				platformCount++;
 			}
 		}
-		_contents[7][0] = _emptyTile;
+		_contents[4][0] = _emptyTile;
 		for (int c=1; c<COLS; c++) {
-			_contents[7][c] = new Tile(7, c, Integer.toString(platformCount), "Unoccupied");
+			_contents[4][c] = new Tile(4, c, Integer.toString(platformCount), "Unoccupied");
 			platformCount++;
 		}
-		_contents[8][0] = new Tile(8, 0, "Enter", "N/A");
+		_contents[5][0] = new Tile(5, 0, "Enter", "N/A");
 		for (int c=1; c<COLS-1; c++) {
-			_contents[8][c] = new Tile(8, c, "Error! This is a wall.", "N/A");
+			_contents[5][c] = new Tile(5, c, "Error! This is a wall.", "N/A");
 		}
-		_contents[8][7] = new Tile(8, 7, "Exit", "N/A");
+		_contents[5][4] = new Tile(5, 4, "Exit", "N/A");
 	}//end reset
 	
 	//==================================================== moveTile
@@ -70,7 +76,7 @@ class SlidePuzzleModel {
         }
     }//end moveTileNorth.
     public void moveTileSouth() {
-    	if (_emptyTile.getRow() + 1 != 8) {
+    	if (_emptyTile.getRow() + 1 != 5) {
     		checkEmpty(_emptyTile.getRow(), _emptyTile.getCol(), +1, 0);
             if (isLegalRowCol(_emptyTile.getRow() +1, _emptyTile.getCol())) {
             	_emptyTile.setRow(+1);
@@ -156,7 +162,6 @@ class SlidePuzzleModel {
 		public void setValue(String newValue) {
 			_value = newValue;
 		}//end setValue
-		
 		//======================================================== getValue
 		public String getValue() {
 			return _value;
@@ -165,6 +170,9 @@ class SlidePuzzleModel {
 		public String getName() {
 			return _name;
 		}//end getName
+		public void setName(String newName) {
+			_name = newName;
+		}//end setValue
 		//======================================================== getHours
 		public String getTime() {
 			return _hours + ":" + _minutes + ":" + _seconds;
