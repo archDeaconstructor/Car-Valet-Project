@@ -16,7 +16,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import maintenanceStaffGUI.SlidePuzzleModel.Tile;
+import maintenanceStaffGUI.SlidePuzzleModel.CarSpots;
 
 /////////////////////////////////////////////////// class SlidePuzzleGUI
 //This class contains all the parts of the GUI interface
@@ -32,10 +32,15 @@ class SlidePuzzleGUI extends JPanel {
 	JButton moveSouth= new JButton("Move South");
 	JButton moveWest= new JButton("Move West");
 	JButton moveEast= new JButton("Move East");
+	JButton carLeaves= new JButton("Force Vehicle Exit");
 	JButton emergencyShutdown= new JButton("EMERGENCY SHUTDOWN");
 	private boolean stillRunning = true;
 	//end instance variables
 	
+	void setCarSpots(int row, int col, String name) {
+		_puzzleModel.setName(row, col, name);
+		_puzzleModel.setSpotTaken(row, col);
+	}//end getName
 	//====================================================== constructor
 	public SlidePuzzleGUI() {
 		//--- Create buttons and text fields
@@ -49,10 +54,8 @@ class SlidePuzzleGUI extends JPanel {
 		moveWest.setVisible(false);
 		moveEast.addActionListener(new movingEast());
 		moveEast.setVisible(false);
-		JButton carEnters= new JButton("A Car Enters!");
-		moveEast.addActionListener(new carEntering());
-		JButton carLeaves= new JButton("A Car Leaves!");
-		moveEast.addActionListener(new carLeaving());
+		carLeaves.addActionListener(new carLeaving());
+		carLeaves.setVisible(false);
 		emergencyShutdown.addActionListener(new shuttingDown());
 		infoDump.setEditable(false);
 		
@@ -64,7 +67,6 @@ class SlidePuzzleGUI extends JPanel {
 		controlPanel.add(moveSouth);
 		controlPanel.add(moveWest);
 		controlPanel.add(moveEast);
-		controlPanel.add(carEnters);
 		controlPanel.add(carLeaves);
 		controlPanel.add(emergencyShutdown);
 		
@@ -117,7 +119,7 @@ class SlidePuzzleGUI extends JPanel {
 				for (int c=0; c<COLS; c++) {
 					int x = c * CELL_SIZE;
 					int y = r * CELL_SIZE;
-					String text = _puzzleModel.getValue(r, c);
+					String text = _puzzleModel.getStorageNumber(r, c);
 					if (text != null) {
 						g.setColor(Color.gray);
 						g.fillRect(x+2, y+2, CELL_SIZE-4, CELL_SIZE-4);
@@ -129,25 +131,25 @@ class SlidePuzzleGUI extends JPanel {
 			}
 			// paints ENTRY square
 			g.setColor(Color.darkGray);
-			g.fillRect(0, (8*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
+			g.fillRect(2, (5*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
 			g.setColor(Color.black);
 			g.setFont(_biggerFont);
-			g.drawString(_puzzleModel.getValue(5, 0), 20, (8*CELL_SIZE)+(3*CELL_SIZE)/4);
+			g.drawString(_puzzleModel.getStorageNumber(5, 0), 20, (5*CELL_SIZE)+(3*CELL_SIZE)/4);
 			// paints walls in bottom row
 			for (int c=1; c<COLS-1; c++) {
 				int x = c * CELL_SIZE;
-				String text = _puzzleModel.getValue(5, c);
+				String text = _puzzleModel.getStorageNumber(5, c);
 				if (text != null) {
 					g.setColor(Color.black);
-					g.fillRect(x+2, (8*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
+					g.fillRect(x+2, (5*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
 				}
 			}
 			// paints EXIT square
 			g.setColor(Color.darkGray);
-			g.fillRect(7*CELL_SIZE, (8*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
+			g.fillRect(4*CELL_SIZE+2, (5*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
 			g.setColor(Color.black);
 			g.setFont(_biggerFont);
-			g.drawString(_puzzleModel.getValue(5, 4), (7*CELL_SIZE)+20, (8*CELL_SIZE)+(3*CELL_SIZE)/4);
+			g.drawString(_puzzleModel.getStorageNumber(5, 4), (4*CELL_SIZE)+20, (5*CELL_SIZE)+(3*CELL_SIZE)/4);
 		}//end paintComponent
 		//toggles whether or not clicking a given platform gives you information
 		public void toggleGetInfo() {
@@ -165,8 +167,8 @@ class SlidePuzzleGUI extends JPanel {
 			if (canGetInfo == true) {
 				int col = e.getX()/CELL_SIZE;
 	            int row = e.getY()/CELL_SIZE;
-	            String setAsInfoDumpText = "Platform No: " + _puzzleModel.getValue(row, col) +
-	            		"\nPosition: " + (col+1) + ", " + (row+1) + "\nCar Owner: " +
+	            String setAsInfoDumpText = "Platform No: " + _puzzleModel.getStorageNumber(row, col) +
+	            		"\nPosition: " + (col+1) + ", " + (row+1) + "\nOccupied: " + _puzzleModel.getSpotTaken(row, col) + "\nCar Owner: " +
 	            		_puzzleModel.getName(row, col) + "\nTime Due: " + _puzzleModel.getTime(row, col) +
 	            		"\nTime Remaining: " + _puzzleModel.getTimeRemaining(row, col);
 	            infoDumpText = setAsInfoDumpText;
@@ -218,22 +220,14 @@ class SlidePuzzleGUI extends JPanel {
 			_puzzleGraphics.repaint();
 		}
 	}//end inner class movingEast
-	public class carEntering implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			String entryName = _puzzleModel.getName(4, 0);
-			if (entryName.equals("Unoccupied") == true) {
-				_puzzleModel.addName(4, 0);
-				_puzzleGraphics.repaint();
-			}
-		}
-	}//end inner class carEntering
 	public class carLeaving implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			String entryName = _puzzleModel.getName(4, 4);
+			String entryName = _puzzleModel.getName(4, 0);
 			if (entryName.equals("N/A") == false && entryName.equals("Unoccupied") == false) {
-				_puzzleModel.removeName(4, 4);
+				_puzzleModel.removeName(4, 0);
+				_puzzleModel.setSpotTaken(4, 0);
+				_puzzleGraphics.repaint();
 			}
-			_puzzleGraphics.repaint();
 		}
 	}//end inner class carLeaving
 	public class shuttingDown implements ActionListener {
@@ -249,6 +243,7 @@ class SlidePuzzleGUI extends JPanel {
 				moveSouth.setVisible(true);
 				moveWest.setVisible(true);
 				moveEast.setVisible(true);
+				carLeaves.setVisible(true);
 			} else {
 				emergencyShutdown.setText("EMERGENCY SHUTDOWN");
 				infoDump.setText(infoDumpText);
@@ -258,6 +253,7 @@ class SlidePuzzleGUI extends JPanel {
 				moveSouth.setVisible(false);
 				moveWest.setVisible(false);
 				moveEast.setVisible(false);
+				carLeaves.setVisible(false);
 			}
 		}
 	}//end inner class shuttingDown
