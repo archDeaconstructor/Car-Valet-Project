@@ -2,43 +2,34 @@ package carParking;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class UserInformationForParking {
-
-	public static void main(String[] args) {
-		//Scanner
+/*
+	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
-		int cardnumber =0;
-		String username = new String();
-		System.out.print("Please enter your card \n");
+		String input = sc.next();
 		
-		//System.out.print(splitString());
+		System.out.print(returnString(input));
 		
-		String test = sc.next();
-		String[] piece1 = test.split(Pattern.quote("^"));
-		
-		String cardNumber = piece1[0];
-		cardNumber = cardNumber.substring(2, 17);
-		
-		String FullName	  = piece1[1];
-		String[] piece2 = FullName.split(Pattern.quote("/"));
-		String firstName  = piece2[0];
-		String lastName   = piece2[1];
-		
-		System.out.print("Thank you "+firstName+" "+lastName+"\nFor the sake of Demonstration "
-				+ "your card number is "+cardNumber);
-		
-		timeStaying();
-		
-	}
+	}*/
 
-	private static String splitString(){
-		return "Hello World";
+	public String returnString(String username){
+		
+				String[] piece1 = username.split(Pattern.quote("^"));
+				
+				String cardNumber = piece1[0];
+				cardNumber = cardNumber.substring(2, 17);
+				
+				String FullName	  = piece1[1];
+				String[] piece2 = FullName.split(Pattern.quote("/"));
+				String firstName  = piece2[0];
+				String lastName   = piece2[1];
+				
+				String Value = cardNumber + " - " + firstName+" "+lastName;
+				
+				//charge with card number
+				//save fullname into members?
+		return Value;
 	}
 	
-	private static int timeStaying(){
-		System.out.print("");
-		return 15;
-	}
 }
