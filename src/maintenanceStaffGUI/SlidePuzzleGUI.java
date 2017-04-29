@@ -37,9 +37,11 @@ class SlidePuzzleGUI extends JPanel {
 	private boolean stillRunning = true;
 	//end instance variables
 	
-	void setCarSpots(int row, int col, String name) {
+	void setCarSpots(int row, int col, String name, int timeNumber, String timeTagged, String dateInit) {
 		_puzzleModel.setName(row, col, name);
 		_puzzleModel.setSpotTaken(row, col);
+		_puzzleModel.setTime(row, col, timeNumber, timeTagged);
+		_puzzleModel.setTimeSince(row, col, dateInit);
 	}//end getName
 	//====================================================== constructor
 	public SlidePuzzleGUI() {
@@ -170,7 +172,7 @@ class SlidePuzzleGUI extends JPanel {
 	            String setAsInfoDumpText = "Platform No: " + _puzzleModel.getStorageNumber(row, col) +
 	            		"\nPosition: " + (col+1) + ", " + (row+1) + "\nOccupied: " + _puzzleModel.getSpotTaken(row, col) + "\nCar Owner: " +
 	            		_puzzleModel.getName(row, col) + "\nTime Due: " + _puzzleModel.getTime(row, col) +
-	            		"\nTime Remaining: " + _puzzleModel.getTimeRemaining(row, col);
+	            		"\nSpot Taken Since: " + _puzzleModel.getTimeSince(row, col);
 	            infoDumpText = setAsInfoDumpText;
 	            if (stillRunning == true) {
 	            	infoDump.setText(infoDumpText);
@@ -224,8 +226,7 @@ class SlidePuzzleGUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			String entryName = _puzzleModel.getName(4, 0);
 			if (entryName.equals("N/A") == false && entryName.equals("Unoccupied") == false) {
-				_puzzleModel.removeName(4, 0);
-				_puzzleModel.setSpotTaken(4, 0);
+				_puzzleModel.restoreDefaults(4, 0);
 				_puzzleGraphics.repaint();
 			}
 		}

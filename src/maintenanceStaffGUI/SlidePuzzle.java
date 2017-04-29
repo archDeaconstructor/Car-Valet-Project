@@ -12,8 +12,8 @@ import javax.swing.JFrame;
 class SlidePuzzle {
     //============================================= method main
 	static SlidePuzzleGUI slidePuzzleGUI = new SlidePuzzleGUI();
-	public void transferName(String name) {
-		slidePuzzleGUI.setCarSpots(4, 4, name);
+	public void transferName(String name, int timeNumber, String timeTagged, String dateInit) {
+		slidePuzzleGUI.setCarSpots(4, 4, name, timeNumber, timeTagged, dateInit);
 	}
     public static void main(String[] args) {
         JFrame window = new JFrame("Slide Puzzle");

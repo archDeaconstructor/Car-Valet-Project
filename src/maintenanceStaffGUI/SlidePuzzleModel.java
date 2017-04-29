@@ -30,8 +30,11 @@ class SlidePuzzleModel {
 	void setName(int row, int col, String name) {
 		_contents[row][col].setName(name);
 	}//end getValue
-	void removeName(int row, int col) {
+	void restoreDefaults(int row, int col) {
 		_contents[row][col].setName("Unoccupied");
+		_contents[row][col].setTime(0, "mins");
+		_contents[row][col].toggleSpotTaken();
+		_contents[row][col].setTimeSince("N/A");
 	}//end getValue
 	String getName(int row, int col) {
 		return _contents[row][col].getName();
@@ -48,8 +51,14 @@ class SlidePuzzleModel {
 	String getTime(int row, int col) {
 		return _contents[row][col].getTime();
 	}//end getTime
-	String getTimeRemaining(int row, int col) {
-		return _contents[row][col].getTimeRemaining();
+	void setTime(int row, int col, int timeNumber, String timeTagged) {
+		_contents[row][col].setTime(timeNumber, timeTagged);
+	}//end getTime
+	String getTimeSince(int row, int col) {
+		return _contents[row][col].getTimeSince();
+	}//end getTimeRemaining
+	void setTimeSince(int row, int col, String dateInit) {
+		_contents[row][col].setTimeSince(dateInit);
 	}//end getTimeRemaining
 		
 	//======================================================= reset
@@ -140,7 +149,7 @@ class SlidePuzzleModel {
 		private boolean _spotTaken; // is there a car?
 		private int _hours; // time from other source
 		private int _minutes; // time from other source
-		private int _seconds; // time from other source
+		private String _dateInit; // time the vehicle was given to us
 		//end instance variables
 		//==================================================== constructor
 		public CarSpots(int row, int col, String storageNumber, String name) {
@@ -149,9 +158,9 @@ class SlidePuzzleModel {
 			_storageNumber = storageNumber;
 			_spotTaken = false;
 			_name = name;
-			_hours = calendar.get(Calendar.HOUR_OF_DAY);
-			_minutes = calendar.get(Calendar.MINUTE);
-			_seconds = calendar.get(Calendar.SECOND);
+			_hours = 0;
+			_minutes = 0;
+			_dateInit = "N/A";
 		}//end constructor
 		//======================================================== setCol
 		public void setCol(int delta) {
@@ -181,6 +190,14 @@ class SlidePuzzleModel {
 		public void setName(String newName) {
 			_name = newName;
 		}//end setValue
+		//======================================================== setTime
+		public void setTime(int timeNumber, String timeTagged) {
+			if (timeTagged.equals("hrs") == true) {
+				_hours = timeNumber;
+			} else if (timeTagged.equals("mins") == true) {
+				_minutes = timeNumber;
+			}
+		}//end setTime
 		//======================================================== getSpotTaken
 		public boolean getSpotTaken() {
 			return _spotTaken;
@@ -193,14 +210,21 @@ class SlidePuzzleModel {
 				_spotTaken = false;
 			}
 		}//end toggleSpotTaken
-		//======================================================== getHours
+		//======================================================== getTime
 		public String getTime() {
-			return _hours + ":" + _minutes + ":" + _seconds;
+			if (_hours != 0) {
+				return (_hours + " hours");
+			} else {
+				return (_minutes + " minutes");
+			}
 		}//end getTime
-		public String getTimeRemaining() {
-			return (_hours - calendar.get(Calendar.HOUR_OF_DAY)) + ":" +
-		(_minutes - calendar.get(Calendar.MINUTE)) + ":" + (_seconds - calendar.get(Calendar.SECOND));
+		//=============================================== getTimeSince
+		public String getTimeSince() {
+			return (_dateInit);
 		}
-		//=============================================== isInFinalPosition
+		//=============================================== setTimeSince
+		public void setTimeSince(String dateInit) {
+			_dateInit = dateInit;
+		}
 	}//end class CarSpots
 }

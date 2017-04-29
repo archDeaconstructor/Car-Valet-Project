@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -58,7 +61,7 @@ public class GUI {
    public void showTextFieldDemo(){ 
 
 	 //Menu starts with enter your info
-      JLabel  namelabel= new JLabel("User CC Info: ", JLabel.RIGHT);
+      JLabel  nameLabel= new JLabel("User CC Info: ", JLabel.RIGHT);
       final JTextField userText = new JTextField(16);   
    
       //pull up a car spot at one point
@@ -90,53 +93,52 @@ public class GUI {
          public void actionPerformed(ActionEvent e) {  
         	try{
         		data= "Credit Card: " + parseInfo.returnString(userText.getText());
-        		saveInfo();
+        		statusLabel.setText(data);
+                JLabel  timeLabel= new JLabel("How long will you leave your vehicle with us? ", JLabel.RIGHT);
+                Integer[] timeNumberOptions = new Integer[60];
+                for (int i = 0; i < 60; i++) {
+                	timeNumberOptions[i] = i+1;
+                }
+                JComboBox timeNumbers = new JComboBox(timeNumberOptions);
+                String[] timeTagOptions = {"mins", "hrs"};
+                JComboBox timeTag = new JComboBox(timeTagOptions);
+               controlPanel.add(timeLabel);
+               controlPanel.add(timeNumbers);
+               controlPanel.add(timeTag);
+               nameLabel.setVisible(false);
+               userText.setVisible(false);
+               switchAdmin.setVisible(false);
+               switchParking.setVisible(false);
+               parkButton.setVisible(false);
+               JButton parkButton2 = new JButton("Confirm");
+               parkButton2.addActionListener(new ActionListener() {
+            	   public void actionPerformed(ActionEvent e) {
+            		   int timeNumber = (int)timeNumbers.getSelectedItem();
+            		   String timeTagged = (String)timeTag.getSelectedItem();
+            		   DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            		   Date date = new Date();
+            		   String dateInit = dateFormat.format(date);
+            		   saveInfo(timeNumber, timeTagged, dateInit);
+            		   SlidePuzzle.main(null);
+            		   mainFrame.setVisible(false);
+            		   mainFrame.dispose();
+            	   }
+               });
+               controlPanel.add(parkButton2);
         	}catch(StringIndexOutOfBoundsException fix){
         		data= "Invalid user input. Please swipe a debit or credit card";
         	}
-            statusLabel.setText(data);
-            JLabel  timeLabel= new JLabel("How long will you leave your vehicle with us? ", JLabel.RIGHT);
-            final JTextField userTime = new JTextField(3);
-            String[] timeTagOptions = {" mins", " hrs"};
-            JComboBox timeTag = new JComboBox(timeTagOptions);
-            JButton fiveButton = new JButton("Five Mins");
-            fiveButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {     
-                   String time = "5 Minutes";
-                   statusLabel.setText(data + " | Staying: " + time);
-                }
-             });
-            controlPanel.add(fiveButton);
-            JButton tenButton = new JButton("Half a Day");
-            tenButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {     
-                   String time = "12 Hours"; 
-                   statusLabel.setText(data+ " | Staying: " + time);
-                }
-             });
-            controlPanel.add(tenButton);
-            JButton dayButton = new JButton("All Day");
-            dayButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {     
-                   String time = "Whole Day"; 
-                   statusLabel.setText(data + " | Staying: " + time);
-                }
-             });
-            controlPanel.add(dayButton);
          }
       }); 
-      controlPanel.add(namelabel);
+      controlPanel.add(nameLabel);
       controlPanel.add(userText);
       controlPanel.add(switchAdmin);
       controlPanel.add(switchParking);
       controlPanel.add(parkButton);
-      
-      controlPanel.add(parkButton);
-      controlPanel.add(parkButton);
       mainFrame.setVisible(true);  
    }
    
-   public void saveInfo(){
-	   slidePuzzle.transferName(parseInfo.first + " " + parseInfo.last);
+   public void saveInfo(int timeNumber, String timeTagged, String dateInit){
+	   slidePuzzle.transferName(parseInfo.first + " " + parseInfo.last, timeNumber, timeTagged, dateInit);
    }
 }
