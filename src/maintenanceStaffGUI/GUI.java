@@ -178,12 +178,15 @@ public class GUI {
 	        		data= "Credit Card: " + parseInfo.returnString(userText.getText());
 	        		statusLabel.setText(data);
 	                JLabel  Label= new JLabel("Your vehicle is being retrieved.", JLabel.RIGHT);
-	               nameLabel.setVisible(false);
-	               userText.setVisible(false);
-	               switchAdmin.setVisible(false);
-	               switchParking.setVisible(false);
-	               parkButton.setVisible(false);
-	               controlPanel.add(Label);
+	                int[] location = slidePuzzle.findMyCar(parseInfo.first + " " + parseInfo.last);
+	                System.out.print(location[0] + ", " + location[1] + "Platform ID: " + location[2]);
+	                //replace the system print with algorithm targeting the tile at this location
+	                nameLabel.setVisible(false);
+	                userText.setVisible(false);
+	                switchAdmin.setVisible(false);
+	                switchParking.setVisible(false);
+	                parkButton.setVisible(false);
+	                controlPanel.add(Label);
 	        	}catch(StringIndexOutOfBoundsException fix){
 	        		data= "Invalid user input. Please swipe a debit or credit card";
 	        	}

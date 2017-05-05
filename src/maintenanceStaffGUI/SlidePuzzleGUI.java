@@ -45,6 +45,30 @@ class SlidePuzzleGUI extends JPanel {
 		_puzzleModel.setTime(row, col, timeNumber, timeTagged);
 		_puzzleModel.setTimeSince(row, col, dateInit);
 	}//end getName
+	boolean isEmptyTile(int row, int col) {
+		return _puzzleModel.isEmptyTile(row, col);
+	}
+	public int[] findMyCar(String name) {
+		int[] rowCol = new int[3];
+		boolean found = false;
+		for (int i = 0; i < 5; i++) {
+			if (found == false) {
+				for (int j = 0; j < 5; j++) {
+					if ((_puzzleModel.getName(i, j)).equals(name) == true) {
+						rowCol[0] = i;
+						rowCol[1] = j;
+						rowCol[2] = Integer.parseInt(_puzzleModel.getStorageNumber(i, j));
+						found = true;
+					}
+				}
+			}
+		}
+		if (found == true) {
+			return rowCol;
+		} else {
+			return null;
+		}
+	}
 	//====================================================== constructor
 	public SlidePuzzleGUI() {
 		//--- Create buttons and text fields
@@ -173,24 +197,6 @@ class SlidePuzzleGUI extends JPanel {
 				canForceCarLeave = false;
 			}
 		}//end toggleGetInfo
-		public int[] findMyCar(String name) {
-			int[] rowCol = new int[2];
-			boolean found = false;
-			for (int i = 0; i < ROWS - 1; i++) {
-				for (int j = 0; j < COLS - 1; j++) {
-					if ((_puzzleModel.getName(i, j)).equals(name) == true) {
-						rowCol[0] = i;
-						rowCol[1] = j;
-						found = true;
-					}
-				}
-			}
-			if (found == true) {
-				return rowCol;
-			} else {
-				return null;
-			}
-		}
 		//======================================== listener mousePressed
 		public void mousePressed(MouseEvent e) {
 			if (canGetInfo == true) {

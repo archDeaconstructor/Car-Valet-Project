@@ -58,6 +58,13 @@ class SlidePuzzleModel {
 	void setTimeSince(int row, int col, String dateInit) {
 		_contents[row][col].setTimeSince(dateInit);
 	}//end getTimeRemaining
+	boolean isEmptyTile(int row, int col) {
+		if ((_emptyTile._row == row) && (_emptyTile._col) == col) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 		
 	//======================================================= reset
 	// Initialize and shuffle the tiles.
