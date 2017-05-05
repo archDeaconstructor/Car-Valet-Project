@@ -1,6 +1,5 @@
 package maintenanceStaffGUI;
 
-import java.util.Calendar;
 
 //SlidePuzzleModel.java - Slide pieces to correct position.
 //Fred Swartz, 2003-May-10
@@ -9,7 +8,6 @@ import java.util.Calendar;
 class SlidePuzzleModel {
 	private static final int ROWS = 6;
 	private static final int COLS = 5;
-	Calendar calendar = Calendar.getInstance();
 	
 	private CarSpots[][] _contents;  // All tiles.
 	private CarSpots     _emptyTile = new CarSpots(4, 0, " ", "N/A"); // The empty space.

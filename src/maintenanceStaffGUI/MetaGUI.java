@@ -9,18 +9,15 @@ package maintenanceStaffGUI;
 import javax.swing.JFrame;
 
 ///////////////////////////////////////////// class SlidePuzzle
-class SlidePuzzle {
+class MetaGUI {
     //============================================= method main
-	static SlidePuzzleGUI slidePuzzleGUI = new SlidePuzzleGUI();
-	static JFrame window = new JFrame("Slide Puzzle");
-	public void transferName(String name, int timeNumber, String timeTagged, String dateInit) {
-		slidePuzzleGUI.setCarSpots(4, 4, name, timeNumber, timeTagged, dateInit);
-	}
+	private static SlidePuzzle slidePuzzle = new SlidePuzzle();
     public static void main(String[] args) {
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setContentPane(slidePuzzleGUI);
-        window.pack();  // finalize layout
-        window.show();  // make window visible
-        window.setResizable(false);
+    	slidePuzzle.main(null);
+    	slidePuzzle.window.setVisible(false);
+    	GUI ExitGUI = new GUI(slidePuzzle);
+		ExitGUI.showTextFieldExit();
+		GUI EntranceGUI = new GUI(slidePuzzle);
+		EntranceGUI.showTextFieldDemo();
     }//end main
 }//endclass SlidePuzzle

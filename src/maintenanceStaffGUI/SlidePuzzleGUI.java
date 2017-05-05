@@ -28,11 +28,13 @@ class SlidePuzzleGUI extends JPanel {
 	String infoDumpTextShutdown = (infoDumpText + "\nAVCPP is currently shut down. Press RESUME OPERATIONS"
 			+ " to resume normal operations.");
 	JTextArea infoDump = new JTextArea(infoDumpText, 44, 60);
+	JButton getInfo= new JButton("Get Platform Info");
 	JButton moveNorth= new JButton("Move North");
 	JButton moveSouth= new JButton("Move South");
 	JButton moveWest= new JButton("Move West");
 	JButton moveEast= new JButton("Move East");
-	JButton carLeaves= new JButton("Force Vehicle Exit");
+	JButton carLeaves= new JButton("Vehicle Exit (At Exit)");
+	JButton carForceLeave = new JButton("Force Target Vehicle Exit");
 	JButton emergencyShutdown= new JButton("EMERGENCY SHUTDOWN");
 	private boolean stillRunning = true;
 	//end instance variables
@@ -46,7 +48,6 @@ class SlidePuzzleGUI extends JPanel {
 	//====================================================== constructor
 	public SlidePuzzleGUI() {
 		//--- Create buttons and text fields
-		JButton getInfo= new JButton("Get Platform Info");
 		getInfo.addActionListener(new gettingInfo());
 		moveNorth.addActionListener(new movingNorth());
 		moveNorth.setVisible(false);
@@ -58,6 +59,8 @@ class SlidePuzzleGUI extends JPanel {
 		moveEast.setVisible(false);
 		carLeaves.addActionListener(new carLeaving());
 		carLeaves.setVisible(false);
+		carForceLeave.addActionListener(new carForceLeaving());
+		carForceLeave.setVisible(false);
 		emergencyShutdown.addActionListener(new shuttingDown());
 		infoDump.setEditable(false);
 		
@@ -70,6 +73,7 @@ class SlidePuzzleGUI extends JPanel {
 		controlPanel.add(moveWest);
 		controlPanel.add(moveEast);
 		controlPanel.add(carLeaves);
+		controlPanel.add(carForceLeave);
 		controlPanel.add(emergencyShutdown);
 		
 		//--- Create graphics panel
@@ -95,6 +99,7 @@ class SlidePuzzleGUI extends JPanel {
 		private static final int ROWS = 6;
 		private static final int COLS = 5;
 		private boolean canGetInfo = false;
+		private boolean canForceCarLeave = false;
 		
 		private static final int CELL_SIZE = 90; // Pixels
 		private Font _biggerFont;
@@ -161,8 +166,30 @@ class SlidePuzzleGUI extends JPanel {
 				canGetInfo = false;
 			}
 		}//end toggleGetInfo
-		public boolean getCanGetInfo() {
-			return canGetInfo;
+		public void toggleCarForceLeave() {
+			if (canForceCarLeave == false) {
+				canForceCarLeave = true;
+			} else {
+				canForceCarLeave = false;
+			}
+		}//end toggleGetInfo
+		public int[] findMyCar(String name) {
+			int[] rowCol = new int[2];
+			boolean found = false;
+			for (int i = 0; i < ROWS - 1; i++) {
+				for (int j = 0; j < COLS - 1; j++) {
+					if ((_puzzleModel.getName(i, j)).equals(name) == true) {
+						rowCol[0] = i;
+						rowCol[1] = j;
+						found = true;
+					}
+				}
+			}
+			if (found == true) {
+				return rowCol;
+			} else {
+				return null;
+			}
 		}
 		//======================================== listener mousePressed
 		public void mousePressed(MouseEvent e) {
@@ -182,6 +209,29 @@ class SlidePuzzleGUI extends JPanel {
 	            	infoDump.setText(infoDumpTextShutdown);
 	            }
 	            toggleGetInfo();
+	            if (stillRunning == false) {
+	            	carForceLeave.setVisible(true);
+	            }
+			}
+			if (canForceCarLeave == true) {
+				int col = e.getX()/CELL_SIZE;
+	            int row = e.getY()/CELL_SIZE;
+	            String setAsInfoDumpText = "Platform No: " + _puzzleModel.getStorageNumber(row, col) +
+	            		"\nPosition: " + (col+1) + ", " + (row+1) + "\nOccupied: " + _puzzleModel.getSpotTaken(row, col) + "\nCar Owner: " +
+	            		_puzzleModel.getName(row, col) + "\nTime Due: " + _puzzleModel.getTime(row, col) +
+	            		"\nSpot Taken Since: " + _puzzleModel.getTimeSince(row, col);
+	            infoDumpText = setAsInfoDumpText;
+	            if (stillRunning == true) {
+	            	infoDump.setText(infoDumpText);
+	            } else {
+	            	String infoDumpTextShutdown = (infoDumpText + "\nAVCPP is currently shut down. "
+	            			+ "Press RESUME OPERATIONS to resume normal operations.");
+	            	infoDump.setText(infoDumpTextShutdown);
+	            }
+	            toggleGetInfo();
+	            if (stillRunning == false) {
+	            	getInfo.setVisible(true);
+	            }
 			}
 		}//end mousePressed	
 		
@@ -196,6 +246,7 @@ class SlidePuzzleGUI extends JPanel {
 	public class gettingInfo implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			_puzzleGraphics.toggleGetInfo();
+			carForceLeave.setVisible(false);
 		}
 	}//end inner class gettingInfo
 	public class movingNorth implements ActionListener {
@@ -231,6 +282,12 @@ class SlidePuzzleGUI extends JPanel {
 			}
 		}
 	}//end inner class carLeaving
+	public class carForceLeaving implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			_puzzleGraphics.toggleCarForceLeave();
+			getInfo.setVisible(false);
+		}
+	}//end inner class carForceLeaving
 	public class shuttingDown implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (stillRunning == true) {
@@ -245,16 +302,19 @@ class SlidePuzzleGUI extends JPanel {
 				moveWest.setVisible(true);
 				moveEast.setVisible(true);
 				carLeaves.setVisible(true);
+				carForceLeave.setVisible(true);
 			} else {
 				emergencyShutdown.setText("EMERGENCY SHUTDOWN");
 				infoDump.setText(infoDumpText);
 				infoDump.setBackground(Color.WHITE);
 				stillRunning = true;
+				getInfo.setVisible(true);
 				moveNorth.setVisible(false);
 				moveSouth.setVisible(false);
 				moveWest.setVisible(false);
 				moveEast.setVisible(false);
 				carLeaves.setVisible(false);
+				carForceLeave.setVisible(false);
 			}
 		}
 	}//end inner class shuttingDown
