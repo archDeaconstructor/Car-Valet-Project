@@ -32,7 +32,7 @@ public class createvisuals extends JPanel {
 		private static final int ROWS = 5;
 		private static final int COLS = 5;
 
-		private static final int CELL_SIZE = 100;
+		private static final int CELL_SIZE = 80;
 		private Font _biggerFont;
 
 		public GraphicsPanel() {
