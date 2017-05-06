@@ -10,7 +10,8 @@ import javax.swing.JFrame;
 public class createwindow {
 	
 	public static void main(String[] args) {
-        JFrame window = new JFrame("Parking Valet");
+        
+		JFrame window = new JFrame("Parking Valet");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setContentPane(new createvisuals());
         window.pack(); 

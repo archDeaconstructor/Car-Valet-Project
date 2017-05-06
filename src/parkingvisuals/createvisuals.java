@@ -48,9 +48,9 @@ public class createvisuals extends JPanel {
 			ArrayList<String> cars = new ArrayList<String>();
 			
 			cars.add("0");
-			//cars.add("1");
-			//cars.add("3");
-			//cars.add("8");
+			cars.add("16");
+			cars.add("8");
+			cars.add("20");
 
 			for (int r = 0; r < ROWS; r++) {
 				for (int c = 0; c < COLS; c++) {
@@ -69,10 +69,15 @@ public class createvisuals extends JPanel {
 								g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);						
 								g.setColor(Color.black);						
 								g.setFont(_biggerFont);						
-								g.drawString(text, x + 20, y + (3 * CELL_SIZE) / 4);								
+								g.drawString(text, x + 20, y + (3 * CELL_SIZE) / 4);
+								//_puzzleModel.Graph(25);
+								//while(text.isEmpty()){
+								//_puzzleModel.addEdge(r, c);}
+								//_puzzleModel.BFS(0);
+								//_puzzleModel.move(r, c + 1);
 								break;					
 						
-							} else {
+							 } else {
 								
 								g.setColor(Color.gray);
 								g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);
@@ -86,6 +91,8 @@ public class createvisuals extends JPanel {
 				}
 			}
 		}
+		
+		
 
 		public void mousePressed(MouseEvent e) {
 			
@@ -112,5 +119,4 @@ public class createvisuals extends JPanel {
 		public void mouseExited(MouseEvent e) {
 		}
 	}
-
 }
