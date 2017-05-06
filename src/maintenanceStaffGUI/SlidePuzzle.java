@@ -11,10 +11,19 @@ import javax.swing.JFrame;
 ///////////////////////////////////////////// class SlidePuzzle
 class SlidePuzzle {
     //============================================= method main
+	static SlidePuzzleGUI slidePuzzleGUI = new SlidePuzzleGUI();
+	static JFrame window = new JFrame("Slide Puzzle");
+	public void transferName(String name, int timeNumber, String timeTagged, String dateInit) {
+		if (slidePuzzleGUI.isEmptyTile(4, 4) == false) {
+			slidePuzzleGUI.setCarSpots(4, 4, name, timeNumber, timeTagged, dateInit);
+		}
+	}
+	public int[] findMyCar(String name) {
+		return (slidePuzzleGUI.findMyCar(name));
+	}
     public static void main(String[] args) {
-        JFrame window = new JFrame("Slide Puzzle");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setContentPane(new SlidePuzzleGUI());
+        window.setContentPane(slidePuzzleGUI);
         window.pack();  // finalize layout
         window.show();  // make window visible
         window.setResizable(false);
