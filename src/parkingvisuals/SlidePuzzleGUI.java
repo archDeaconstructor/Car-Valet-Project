@@ -151,7 +151,7 @@ class SlidePuzzleGUI extends JPanel {
 				}
 			}
 			// paints ENTRY square
-			g.setColor(Color.white);
+			g.setColor(Color.cyan);
 			g.fillRect(2, (5*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
 			g.setColor(Color.black);
 			g.setFont(_biggerFont);
@@ -166,7 +166,7 @@ class SlidePuzzleGUI extends JPanel {
 				}
 			}
 			// paints EXIT square
-			g.setColor(Color.white);
+			g.setColor(Color.cyan);
 			g.fillRect(4*CELL_SIZE+2, (5*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
 			g.setColor(Color.black);
 			g.setFont(_biggerFont);
