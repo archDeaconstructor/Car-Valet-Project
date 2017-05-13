@@ -118,6 +118,8 @@ public class GUI {
                JButton parkButton2 = new JButton("Confirm");
                parkButton2.addActionListener(new ActionListener() {
             	   public void actionPerformed(ActionEvent e) {
+            		   SlidePuzzleGUI.spaces--;
+           				SlidePuzzleGUI.spacesOpen.setText(""+SlidePuzzleGUI.spaces);
             		   int timeNumber = (int)timeNumbers.getSelectedItem();
             		   String timeTagged = (String)timeTag.getSelectedItem();
             		   DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

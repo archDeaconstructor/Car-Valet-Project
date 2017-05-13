@@ -69,6 +69,19 @@ class SlidePuzzleModel {
 	}
 
 	
+	public int count(){
+		int count = 0;
+		for (int r=0; r<5; r++) {
+			for (int c=0; c<5; c++) {
+				if(_contents[c][r].getSpotTaken()){
+					count++;
+				}
+			}
+		}
+		return count;
+		
+	}
+	
 	
 	//======================================================= reset
 	// Initialize and shuffle the tiles.
@@ -87,6 +100,7 @@ class SlidePuzzleModel {
 			platformCount++;
 		}
 		_contents[5][0] = new CarSpots(5, 0, "Exit", "N/A");
+		_contents[5][1] = new CarSpots(5, 1, ""+count(), "N/A");
 		for (int c=1; c<COLS-1; c++) {
 			_contents[5][c] = new CarSpots(5, c, "Error! This is a wall.", "N/A");
 		}

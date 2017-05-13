@@ -28,12 +28,15 @@ class SlidePuzzleGUI extends JPanel {
 	//=============================================== instance variables
 	private GraphicsPanel    _puzzleGraphics;
 	public SlidePuzzleModel _puzzleModel = new SlidePuzzleModel();
+	public static int spaces = 24;
 	String infoDumpText = ("-");
 	String infoDumpTextShutdown = (infoDumpText + "\nAVCPP is currently shut down. Press RESUME OPERATIONS"
 			+ " to resume normal operations.");
 	JTextArea infoDump = new JTextArea(infoDumpText, 44, 60);
+	static JLabel  spacesOpen = new JLabel(""+spaces);
 	JButton openSpots= new JButton("There are "+emptyCount()+ " spots open");
 	JButton getInfo= new JButton("Call Your Car");
+	JButton arrival= new JButton("New Arrival");
 	JButton moveNorth= new JButton("Move North");
 	JButton moveSouth= new JButton("Move South");
 	JButton moveWest= new JButton("Move West");
@@ -77,6 +80,7 @@ class SlidePuzzleGUI extends JPanel {
 	//====================================================== constructor
 	public SlidePuzzleGUI() {
 		//--- Create buttons and text fields
+		arrival.addActionListener(new newArrival());
 		getInfo.addActionListener(new gettingInfo());
 		moveNorth.addActionListener(new movingNorth());
 		moveNorth.setVisible(false);
@@ -93,6 +97,8 @@ class SlidePuzzleGUI extends JPanel {
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
 		
+		controlPanel.add(spacesOpen);
+		controlPanel.add(arrival);
 		controlPanel.add(getInfo);
 		controlPanel.add(moveNorth);
 		controlPanel.add(moveSouth);
@@ -152,11 +158,20 @@ class SlidePuzzleGUI extends JPanel {
 					int y = r * CELL_SIZE;
 					String text = _puzzleModel.getStorageNumber(r, c);
 					if (text != null) {
+						if(_puzzleModel.getSpotTaken(r, c)){
+							g.setColor(Color.red);					
+							g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);						
+							g.setColor(Color.black);						
+							g.setFont(_biggerFont);						
+							g.drawString(text, x + 20, y + (3 * CELL_SIZE) / 4);
+							
+						} else {
 						g.setColor(Color.gray);
 						g.fillRect(x+2, y+2, CELL_SIZE-4, CELL_SIZE-4);
 						g.setColor(Color.black);
 						g.setFont(_biggerFont);
 						g.drawString(text, x+20, y+(3*CELL_SIZE)/4);
+						}
 					}
 				}
 			}
@@ -166,6 +181,7 @@ class SlidePuzzleGUI extends JPanel {
 			g.setColor(Color.black);
 			g.setFont(_biggerFont);
 			g.drawString(_puzzleModel.getStorageNumber(5, 0), 20, (5*CELL_SIZE)+(3*CELL_SIZE)/4);
+			
 			// paints walls in bottom row
 			for (int c=1; c<COLS-1; c++) {
 				int x = c * CELL_SIZE;
@@ -219,7 +235,9 @@ class SlidePuzzleGUI extends JPanel {
 		public void mousePressed(MouseEvent e) {
 			int col = e.getX()/CELL_SIZE;
             int row = e.getY()/CELL_SIZE;
-			if (_puzzleModel.getSpotTaken(row, col)==true) {
+            if(_puzzleModel.getStorageNumber(row, col).equals("Error! This is a wall.")) {
+            	// do nothing
+            } else if (_puzzleModel.getSpotTaken(row, col)==true) {
 				
 	            String setAsInfoDumpText = "Platform No: " + _puzzleModel.getStorageNumber(row, col) +
 	            		"\nPosition: " + (col+1) + ", " + (row+1) + "\nOccupied: " + _puzzleModel.getSpotTaken(row, col) + "\nCar Owner: " +
@@ -376,6 +394,8 @@ class SlidePuzzleGUI extends JPanel {
 					}
 				}
 //			_puzzleModel.getCarSpots(row, col).setColor(Color.blue);
+//				spaces--;
+//				spacesOpen.setText(""+spaces);
 			
 			GUI EntranceGUI = new GUI(MetaGUI.slidePuzzle);
 			EntranceGUI.showTextFieldDemo();
@@ -410,6 +430,160 @@ class SlidePuzzleGUI extends JPanel {
 	}//end class GraphicsPanel
 	
 	////////////////////////////////////////// inner class gettingInfo
+	public class newArrival implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			outerloop:
+			for (int r=0; r<5; r++) {
+				for (int c=0; c<5; c++) {
+					if(!_puzzleModel.getSpotTaken(r, c)){
+						if(c == 4 && r == 4){
+							// done
+						}else if(_puzzleModel._emptyTile.getCol()>c){
+							for (int i = _puzzleModel._emptyTile.getCol();i>c;i--){
+								_puzzleModel.moveTileWest();
+								_puzzleGraphics.repaint();
+								
+								}
+								for (int i = _puzzleModel._emptyTile.getRow();i>r;i--){
+									_puzzleModel.moveTileNorth();
+									_puzzleGraphics.repaint();
+								}
+								for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+								_puzzleModel.moveTileEast();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileWest();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileNorth();
+								_puzzleGraphics.repaint();
+								}
+								_puzzleModel.moveTileEast();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileWest();
+								_puzzleGraphics.repaint();
+								for (int i = 0;i<3-c;i++){
+									_puzzleModel.moveTileNorth();
+									_puzzleGraphics.repaint();
+									_puzzleModel.moveTileEast();
+									_puzzleGraphics.repaint();
+									_puzzleModel.moveTileEast();
+									_puzzleGraphics.repaint();
+									_puzzleModel.moveTileSouth();
+									_puzzleGraphics.repaint();
+									_puzzleModel.moveTileWest();
+									_puzzleGraphics.repaint();
+									}
+						} else if (c == 4) {
+							for (int i = _puzzleModel._emptyTile.getCol();i<c;i++){
+								_puzzleModel.moveTileEast();
+								_puzzleGraphics.repaint();
+								}
+							for (int i = _puzzleModel._emptyTile.getRow();i>r;i--){
+								_puzzleModel.moveTileNorth();
+								_puzzleGraphics.repaint();
+							}
+							for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+								_puzzleModel.moveTileWest();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileEast();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileNorth();
+								_puzzleGraphics.repaint();
+								}
+//						} else if (col == 0) {
+//							for (int i = _puzzleModel._emptyTile.getCol();i>=col;i--){
+//								_puzzleModel.moveTileWest();
+//								_puzzleGraphics.repaint();
+//								}
+//							for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+//								_puzzleModel.moveTileNorth();
+//								_puzzleGraphics.repaint();
+//							}
+//							for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+//								_puzzleModel.moveTileEast();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileSouth();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileSouth();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileWest();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileNorth();
+//								_puzzleGraphics.repaint();
+//								}
+//							for (int i = 0;i<3-col;i++){
+//								_puzzleModel.moveTileNorth();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileEast();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileEast();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileSouth();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileWest();
+//								_puzzleGraphics.repaint();
+//								}
+							
+						} else {
+						for (int i = _puzzleModel._emptyTile.getCol();i<c;i++){
+							
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						}
+						for (int i = _puzzleModel._emptyTile.getRow();i>r;i--){
+							_puzzleModel.moveTileNorth();
+							_puzzleGraphics.repaint();
+						}
+						for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+						}
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						for (int i = 0;i<3-c;i++){
+							_puzzleModel.moveTileNorth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileEast();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileEast();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileSouth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileWest();
+							_puzzleGraphics.repaint();
+							}
+						}
+						
+						GUI EntranceGUI = new GUI(MetaGUI.slidePuzzle);
+						EntranceGUI.showTextFieldDemo();
+//					_puzzleModel.getCarSpots(row, col).setColor(Color.blue);
+						break outerloop;
+					}
+				}
+				}
+		}
+	}
 	public class gettingInfo implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			GUI ExitGUI = new GUI(MetaGUI.slidePuzzle);
@@ -482,41 +656,361 @@ class SlidePuzzleGUI extends JPanel {
 		}
 	}//end inner class shuttingDown
 	
+	public int count(){
+		int count = 24;
+		for (int r=0; r<5; r++) {
+			for (int c=0; c<5; c++) {
+				if(_puzzleModel.getSpotTaken(r,c)){
+					count--;
+				}
+			}
+		}
+		return count;
+		
+	}
+	
 	public void removeCar(int row, int col){
 		
 		_puzzleModel.moveTileSouth();
 		_puzzleModel.moveTileSouth();
 			
 		if(row == 4 && col == 0){
+		// in spot needed do nothing	
 			
-		}else if(_puzzleModel._emptyTile.getCol()>col){
-			for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
-				_puzzleModel.moveTileWest();
-				_puzzleGraphics.repaint();
-				
+		// in col 0
+		}else if(row!=4&&col==0 ){
+			// blank above same col
+			if(_puzzleModel._emptyTile.getRow()<row&&_puzzleModel._emptyTile.getCol()==0){
+				for(int i = _puzzleModel._emptyTile.getRow();i<row+1;i++){
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
 				}
-				for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+				
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
 					_puzzleModel.moveTileNorth();
 					_puzzleGraphics.repaint();
 				}
-				for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
-				_puzzleModel.moveTileEast();
+				// blank under same colom
+			} else if (_puzzleModel._emptyTile.getRow()>row&&_puzzleModel._emptyTile.getCol()==0){
+				_puzzleModel.moveTileNorth();
 				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileSouth();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileSouth();
-				_puzzleGraphics.repaint();
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				// blank over to right
+			} else if (_puzzleModel._emptyTile.getRow()<row&&_puzzleModel._emptyTile.getCol()>0){
+				for(int i = _puzzleModel._emptyTile.getCol();i>col+1;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+				}
+				for(int i = _puzzleModel._emptyTile.getRow();i<row+1;i++){
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+				}
 				_puzzleModel.moveTileWest();
 				_puzzleGraphics.repaint();
 				_puzzleModel.moveTileNorth();
 				_puzzleGraphics.repaint();
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
 				}
+				// blank under to right
+			} else if (_puzzleModel._emptyTile.getRow()<row&&_puzzleModel._emptyTile.getCol()>0){
+				for(int i = _puzzleModel._emptyTile.getCol();i>col+1;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+				}
+				for(int i = _puzzleModel._emptyTile.getRow();i>row+1;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				//blank same row to the right
+			} else if (_puzzleModel._emptyTile.getRow()==row&&_puzzleModel._emptyTile.getCol()>0){
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				for(int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+				}
+				
+			
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				
+			}
+		} else if(_puzzleModel._emptyTile.getCol()>col&& row==4){
+			for(int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+			}
+			for(int i = _puzzleModel._emptyTile.getCol();i>col+1;i--){
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+			}
+			for(int i = _puzzleModel._emptyTile.getCol()-1;i>0;i--){
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
 				_puzzleModel.moveTileWest();
 				_puzzleGraphics.repaint();
 				_puzzleModel.moveTileSouth();
 				_puzzleGraphics.repaint();
 				_puzzleModel.moveTileEast();
 				_puzzleGraphics.repaint();
+			}
+//		} 
+//		else if (_puzzleModel._emptyTile.getCol()<col&& row==4){
+//		}
+			
+			// blank square to the right not in col 0 not equal col and row not 4
+		} else if(_puzzleModel._emptyTile.getCol()>col&& row!=4){
+			// blank under
+			if(_puzzleModel._emptyTile.getRow()>row){
+				for(int i = _puzzleModel._emptyTile.getRow(); i>row+1;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					
+					}
+				for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = 3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					}
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				
+				for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+				}
+			} else if(_puzzleModel._emptyTile.getRow()<=row){
+				for(int i = _puzzleModel._emptyTile.getRow();i<row+1;i++){
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+				}
+				for(int i = _puzzleModel._emptyTile.getCol();i<col;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+				}
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				for(int i = 3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				
+				for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+				}
+				
+				
+			}
+				// blank under
+				if(_puzzleModel._emptyTile.getRow()>row){
+					for(int i = _puzzleModel._emptyTile.getRow(); i>row+1;i--){
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+					}
+					for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						
+						}
+					for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+					}
+					for (int i = 3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+						}
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					
+					for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+					}
+				
+			// blank over or same row	
+			}  else if (_puzzleModel._emptyTile.getCol()<=col){
+				for(int i = _puzzleModel._emptyTile.getRow(); i<row+1;i++){
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					
+					}
+				for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = 3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					}
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				
+				for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+				}
+				
+			}
+			
+			
+				
+				
 //				for (int i = 0;i<3-col;i++){
 //					_puzzleModel.moveTileNorth();
 //					_puzzleGraphics.repaint();
@@ -553,18 +1047,29 @@ class SlidePuzzleGUI extends JPanel {
 //
 //			
 		} else {
+		// blank square to the left
+			
+			//move tile down
+			for(int r =_puzzleModel._emptyTile.getRow(); r<4;r++){
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+			}
+			
+		// move blank to the right
 		for (int i = _puzzleModel._emptyTile.getCol();i<col;i++){
 			
 		_puzzleModel.moveTileEast();
 		_puzzleGraphics.repaint();
 		}
+		// move blank up to where desiered square is 
 		for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
 			_puzzleModel.moveTileNorth();
 			_puzzleGraphics.repaint();
 		}
-		if(row == 4 && col == 4){
+//		if(row == 4 && col == 4){
+		if(row == 4){
 			// on right
-			for (int i = 0;i<3;i++){
+			for (int i = col-1;i>0;i--){
 			_puzzleModel.moveTileNorth();
 			_puzzleGraphics.repaint();
 			_puzzleModel.moveTileWest();
@@ -576,50 +1081,28 @@ class SlidePuzzleGUI extends JPanel {
 			_puzzleModel.moveTileEast();
 			_puzzleGraphics.repaint();
 			}
-		} else if(row == 4 && col !=4){
-			_puzzleModel.moveTileWest();
-			_puzzleGraphics.repaint();
-			_puzzleModel.moveTileSouth();
-			_puzzleGraphics.repaint();
-			_puzzleModel.moveTileEast();
-			_puzzleGraphics.repaint();
-			for (int i = _puzzleModel._emptyTile.getCol();i>1;i--){
-				_puzzleModel.moveTileNorth();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileWest();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileWest();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileSouth();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileEast();
-				_puzzleGraphics.repaint();
-				}
+//		} else if(row == 4 && col ==5){
+//			_puzzleModel.moveTileWest();
+//			_puzzleGraphics.repaint();
+//			_puzzleModel.moveTileSouth();
+//			_puzzleGraphics.repaint();
+//			_puzzleModel.moveTileEast();
+//			_puzzleGraphics.repaint();
+//			for (int i = _puzzleModel._emptyTile.getCol();i>1;i--){
+//				_puzzleModel.moveTileNorth();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileWest();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileWest();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileSouth();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileEast();
+//				_puzzleGraphics.repaint();
+//				}
+//			
+//		}
 			
-		}
-			// to the top
-			_puzzleModel.moveTileWest();
-			_puzzleGraphics.repaint();
-			_puzzleModel.moveTileSouth();
-			_puzzleGraphics.repaint();
-			_puzzleModel.moveTileSouth();
-			_puzzleGraphics.repaint();
-			_puzzleModel.moveTileEast();
-			_puzzleGraphics.repaint();
-			_puzzleModel.moveTileNorth();
-			_puzzleGraphics.repaint();
-			for (int i = 0;i<col-1;i++){
-				_puzzleModel.moveTileNorth();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileWest();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileWest();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileSouth();
-				_puzzleGraphics.repaint();
-				_puzzleModel.moveTileEast();
-				_puzzleGraphics.repaint();
-				}
 			
 		
 //		for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
@@ -652,9 +1135,32 @@ class SlidePuzzleGUI extends JPanel {
 //			_puzzleModel.moveTileEast();
 //			_puzzleGraphics.repaint();
 //			}
+		} else if (row!=4) {
+			// to the top
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						for (int i = col -1;i>0;i--){
+							_puzzleModel.moveTileNorth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileWest();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileWest();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileSouth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileEast();
+							_puzzleGraphics.repaint();
+							}
+		}
 		}
 		String entryName = _puzzleModel.getName(4, 0);
 		if (entryName.equals("N/A") == false && entryName.equals("Unoccupied") == false) {
+			spaces++;
+			spacesOpen.setText(""+spaces);
 			_puzzleModel.restoreDefaults(4, 0);
 			_puzzleGraphics.repaint();
 		}
