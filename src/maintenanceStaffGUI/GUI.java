@@ -223,11 +223,11 @@ public class GUI {
 						JLabel Label = new JLabel(
 								"<html>Your vehicle is being retrieved.<br> You have been charged $3.00 to your account.<br>Please Come again!</html>", JLabel.CENTER);
 						controlPanel.add(Label);
-					} else if (timeNumber > 30 && timeNumber < 60 && timeTagged == "mins") {
+					} else if (timeNumber > 30 && timeNumber < 60 && timeTagged == "mins" || (timeNumber <=1 && timeTagged == "hrs")) {
 						JLabel Label = new JLabel(
 								"<html>Your vehicle is being retrieved.<br> You have been charged $5.00 to your account.<br>Please Come again!</html>",JLabel.CENTER);
 						controlPanel.add(Label);
-					} else {
+					} else{
 						JLabel Label = new JLabel(
 								"<html>Your vehicle is being retrieved.<br> You have been charged $10.00 to your account.<br>Please Come again!</html>", JLabel.CENTER);
 						controlPanel.add(Label);
