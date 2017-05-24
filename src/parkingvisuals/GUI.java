@@ -118,7 +118,7 @@ public class GUI {
 					 **/
 					JTextField timeInput = new JTextField(3);
 					String[] timeTagOptions = { "mins", "hrs" };
-					JComboBox timeTag = new JComboBox(timeTagOptions);
+					timeTag = new JComboBox(timeTagOptions);
 					controlPanel.add(timeLabel);
 					controlPanel.add(timeInput);
 					// controlPanel.add(timeNumbers);
