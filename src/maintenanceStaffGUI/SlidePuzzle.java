@@ -21,6 +21,11 @@ class SlidePuzzle {
 	public int[] findMyCar(String name) {
 		return (slidePuzzleGUI.findMyCar(name));
 	}
+	
+	public void removeCar(int row, int col){
+		slidePuzzleGUI.removeCar(row, col);
+		
+	}
     public static void main(String[] args) {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setContentPane(slidePuzzleGUI);
