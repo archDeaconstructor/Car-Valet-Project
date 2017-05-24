@@ -30,7 +30,9 @@ public class GUI {
 	private SlidePuzzle slidePuzzle;
 	String data;
 	UserInformationForParking parseInfo = new UserInformationForParking();
-
+	public static int timeNumber;
+	public static JComboBox timeTag;
+	
 	public GUI(SlidePuzzle slidePuzzler) {
 		this.slidePuzzle = slidePuzzler;
 		prepareGUI();
@@ -77,7 +79,7 @@ public class GUI {
 		controlPanel.removeAll();
 	}
 
-	public void showTextFieldDemo() {
+	public String showTextFieldDemo() {
 
 		// Menu starts with enter your info
 		JLabel nameLabel = new JLabel("User CC Info: ", JLabel.RIGHT);
@@ -139,25 +141,30 @@ public class GUI {
 							saveInfo(timeNumber, timeTagged, dateInit);
 							Calendar calendar = GregorianCalendar.getInstance();
 							calendar.setTime(date);
+							int time = (timeNumber + date.getMinutes());
 
 							resetGUI();
 							slidePuzzle.main(null);
 							thank();
 							if (timeTagged == "hrs") {
 								int hours = (timeNumber + calendar.get(Calendar.HOUR));
-								JLabel thank = new JLabel(
-										"<html>Thank you for using ACVPP! <br> Your Time Expires at: " + hours + ":"
-												+ dateInit.substring(14, 16) + " " + dateInit.substring(20, 22)
-												+ ".</html>",
-										JLabel.CENTER);
+								JLabel thank = new JLabel("<html>Thank you for using ACVPP! <br> Your Time Expires at: "
+										+ hours + ":" + dateInit.substring(14, 16) + " " + dateInit.substring(20, 22)
+										+ ".</html>", JLabel.CENTER);
+								controlPanel.add(thank);
+							} else if(time >= 60){
+								String curr = String.format("%02d", (time-60));
+								int hours = calendar.get(Calendar.HOUR);
+								hours++;
+								JLabel thank = new JLabel("<html>Thank you for using ACVPP! <br> Your Time Expires at: "
+										+ hours + ":" + curr + " " + dateInit.substring(20, 22)
+										+ ".</html>", JLabel.CENTER);
 								controlPanel.add(thank);
 							} else {
-								int time = (timeNumber + date.getMinutes());
-								JLabel thank = new JLabel(
-										"<html>Thank you for using ACVPP! <br> Your Time Expires at: "
-												+ calendar.get(Calendar.HOUR) + ":" + time + " " + dateInit.substring(20, 22)
-												+ ".</html>",
-										JLabel.CENTER);
+								String curr = String.format("%02d", time);
+								JLabel thank = new JLabel("<html>Thank you for using ACVPP! <br> Your Time Expires at: "
+										+ calendar.get(Calendar.HOUR) + ":" + curr + " " + dateInit.substring(20, 22)
+										+ ".</html>", JLabel.CENTER);
 								controlPanel.add(thank);
 							}
 						}
@@ -175,6 +182,7 @@ public class GUI {
 		controlPanel.add(switchParking);
 		controlPanel.add(parkButton);
 		mainFrame.setVisible(true);
+		return (timeNumber + " " + timeTag);
 	}
 
 	public void showTextFieldExit() {
@@ -206,23 +214,30 @@ public class GUI {
 
 		JButton parkButton = new JButton("Retrieve Your Vehicle");
 		parkButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) throws StringIndexOutOfBoundsException {
 				try {
 					data = "Credit Card: " + parseInfo.returnString(userText.getText());
 					statusLabel.setText(data);
-					// JLabel Label = new JLabel("Your vehicle is being
-					// retrieved.", JLabel.RIGHT);
-
-					// System.out.print(location[0] + ", " + location[1] +
-					// "Platform ID: " + location[2]);
-
-					// not finished, working on calculations
-					JLabel Label = new JLabel("<html>Your vehicle is being retrieved.<br> You have been charged $"
-							+ " to your account.<br>" + "Please Come again!</html>", JLabel.CENTER);
 					int[] location = slidePuzzle.findMyCar(parseInfo.first + " " + parseInfo.last);
 					int row = location[0];
 					int col = location[1];
-					controlPanel.add(Label);
+					// System.out.print(location[0] + ", " + location[1] +
+					// "Platform ID: " + location[2]);
+
+					String timeTagged = (String) timeTag.getSelectedItem();
+					if (timeNumber <= 30 && timeTagged == "mins") {
+						JLabel Label = new JLabel(
+								"<html>Your vehicle is being retrieved.<br> You have been charged $3.00 to your account.<br>Please Come again!</html>", JLabel.CENTER);
+						controlPanel.add(Label);
+					} else if (timeNumber > 30 && timeNumber < 60 && timeTagged == "mins") {
+						JLabel Label = new JLabel(
+								"<html>Your vehicle is being retrieved.<br> You have been charged $5.00 to your account.<br>Please Come again!</html>",JLabel.CENTER);
+						controlPanel.add(Label);
+					} else {
+						JLabel Label = new JLabel(
+								"<html>Your vehicle is being retrieved.<br> You have been charged $10.00 to your account.<br>Please Come again!</html>", JLabel.CENTER);
+						controlPanel.add(Label);
+					}
 					slidePuzzle.removeCar(row, col);
 
 					// replace the system print with algorithm targeting the
@@ -232,9 +247,9 @@ public class GUI {
 					switchAdmin.setVisible(false);
 					switchParking.setVisible(false);
 					parkButton.setVisible(false);
-					mainFrame.setVisible(false);
+					mainFrame.setVisible(true);
 
-				} catch (StringIndexOutOfBoundsException fix) {
+				} catch (Exception fix) {
 					JOptionPane.showMessageDialog(mainFrame,
 							"Invalid user input or You do not have a car parked here. Please swipe again", "Error",
 							JOptionPane.ERROR_MESSAGE);
