@@ -638,8 +638,6 @@ class SlidePuzzleGUI extends JPanel {
 				infoDump.setText(infoDumpTextShutdown);
 				infoDump.setBackground(Color.ORANGE);
 				stillRunning = false;
-				getInfo.setVisible(false);
-				arrival.setVisible(false);
 				moveNorth.setVisible(true);
 				moveSouth.setVisible(true);
 				moveWest.setVisible(true);
