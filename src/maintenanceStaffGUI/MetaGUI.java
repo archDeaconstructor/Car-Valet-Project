@@ -14,7 +14,15 @@ class MetaGUI {
 	static SlidePuzzle slidePuzzle = new SlidePuzzle();
     public static void main(String[] args) {
     	slidePuzzle.main(null);
+<<<<<<< HEAD
     	slidePuzzle.window.setVisible(true);
 
+=======
+    	slidePuzzle.window.setVisible(false);
+//    	GUI ExitGUI = new GUI(slidePuzzle);
+//		ExitGUI.showTextFieldExit();
+		GUI EntranceGUI = new GUI(slidePuzzle);
+		EntranceGUI.showTextFieldDemo();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
     }//end main
 }//endclass SlidePuzzle

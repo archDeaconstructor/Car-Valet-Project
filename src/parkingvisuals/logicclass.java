@@ -1,7 +1,5 @@
 package parkingvisuals;
 
-import java.util.ArrayList;
-
 class logicclass {
 	 private static final int ROWS = 5;
 	 private static final int COLS = 5;
@@ -26,53 +24,14 @@ class logicclass {
 	         }
 	     }
 	     //--- Set tile face to null to mark empty space
-	     _emptyTile = _contents[ROWS-1][COLS-5];
+	     _emptyTile = _contents[ROWS-5][COLS-4];
 	     _emptyTile.setFace(null);
 	        
 	 }//end reset
 	 
 	 // Move a tile to empty position beside it, if possible.
 	 // Return true if it was moved, false if not legal.
-	 /*public boolean moveTile(int r, int c) {
-	     //--- It's a legal move if the empty cell is next to it.
-	     return checkEmpty(r, c, -1, 0) || checkEmpty(r, c, 1, 0) || checkEmpty(r, c, 0, -1) || checkEmpty(r, c, 0, 1);
-	 }//end moveTile */
-	 
 	 public boolean moveTile(int r, int c) {
-		 int emtRow = _emptyTile.getRow();
-		 int emtCol = _emptyTile.getCol();
-		 
-		 if(emtRow<r){
-			 int newRow = emtRow+1;
-			 if(isLegalRowCol(newRow,emtCol)){
-				 exchangeTiles(emtRow,emtCol,newRow,emtCol);
-				 _emptyTile = _contents[newRow][emtCol];
-				 moveTile(r,c);
-			 }
-		 } else if (emtRow>r){
-			 checkEmpty(r, c, -1, 0);
-			 }
-		 } else {
-			 if(emtCol<c){
-				 int newCol = emtCol+1;
-				 if(isLegalRowCol(emtRow,newCol)){
-					 exchangeTiles(emtRow,emtCol,emtRow, newCol);
-					 _emptyTile = _contents[emtRow][newCol];
-					 moveTile(r,c);
-				 }
-			 } else if (emtCol>c){
-				 int newCol = emtCol-1;
-				 if(isLegalRowCol(emtRow,newCol)){
-					 exchangeTiles(emtRow,emtCol,emtRow,newCol);
-					 _emptyTile = _contents[emtRow][newCol];
-					 moveTile(r,c);
-				 } else {
-					 exchangeTiles(emtRow,emtCol,r,c);
-				 }
-			 }
-		 }
-		 
-		 
 	     //--- It's a legal move if the empty cell is next to it.
 	     return checkEmpty(r, c, -1, 0) || checkEmpty(r, c, 1, 0) || checkEmpty(r, c, 0, -1) || checkEmpty(r, c, 0, 1);
 	 }//end moveTile
@@ -128,22 +87,7 @@ class logicclass {
 	 public String getFace() {
 	     return _face;
 	 }//end getFace
-	 
-	 public int getRow(){
-		 return _row;
-	 }
-	 
-	 public int getCol(){
-		 return _col;
-	 }
-	 
-	 public int[] getPosition(){
-		 int position[] = new int[2];
-		 position[1]=_row;
-		 position[2]=_col;
-		 return position;
-	 }
-	 
+
 	 public boolean isInFinalPosition(int r, int c) {
 	     return r==_row && c==_col;
 	 }//end isInFinalPosition

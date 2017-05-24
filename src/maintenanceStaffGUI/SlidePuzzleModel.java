@@ -9,7 +9,11 @@ class SlidePuzzleModel {
 	private static final int ROWS = 6;
 	private static final int COLS = 5;
 	
+<<<<<<< HEAD
 	CarSpots[][] _contents;  // All tiles.
+=======
+	private CarSpots[][] _contents;  // All tiles.
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 	CarSpots     _emptyTile = new CarSpots(4, 0, " ", "N/A"); // The empty space.
 	
 	
@@ -171,7 +175,10 @@ class SlidePuzzleModel {
 		private String _storageNumber;  // string to display for identification
 		private String _name; // name from other source
 		boolean _spotTaken; // is there a car?
+<<<<<<< HEAD
 		boolean _justLeft;
+=======
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 		private int _hours; // time from other source
 		private int _minutes; // time from other source
 		private String _dateInit; // time the vehicle was given to us
@@ -180,14 +187,20 @@ class SlidePuzzleModel {
 		public CarSpots(int row, int col, String storageNumber, String name) {
 			_row = row;
 			_col = col;
+<<<<<<< HEAD
 			set_storageNumber(storageNumber);
 			_spotTaken = false;
 			_justLeft = false;
+=======
+			_storageNumber = storageNumber;
+			_spotTaken = false;
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 			_name = name;
 			_hours = 0;
 			_minutes = 0;
 			_dateInit = "N/A";
 		}//end constructor
+<<<<<<< HEAD
 		
 		//======================================================== setCol
 		public void setJustLeft(Boolean justLeft) {
@@ -197,6 +210,8 @@ class SlidePuzzleModel {
 		public boolean getJustLeft() {
 			return _justLeft;
 		}//end getCol
+=======
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 		//======================================================== setCol
 		public void setCol(int delta) {
 			_col += delta;
@@ -215,7 +230,11 @@ class SlidePuzzleModel {
 		}//end getRow
 		//======================================================== getValue
 		public String getStorageNumber() {
+<<<<<<< HEAD
 			return get_storageNumber();
+=======
+			return _storageNumber;
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 		}//end getValue
 		//======================================================== getName
 		public String getName() {
@@ -261,11 +280,14 @@ class SlidePuzzleModel {
 		public void setTimeSince(String dateInit) {
 			_dateInit = dateInit;
 		}
+<<<<<<< HEAD
 		public String get_storageNumber() {
 			return _storageNumber;
 		}
 		public void set_storageNumber(String _storageNumber) {
 			this._storageNumber = _storageNumber;
 		}
+=======
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 	}//end class CarSpots
 }

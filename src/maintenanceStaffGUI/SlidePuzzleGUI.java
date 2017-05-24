@@ -146,13 +146,23 @@ class SlidePuzzleGUI extends JPanel {
 		//=======================================x method paintComponent
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
+<<<<<<< HEAD
 			
+=======
+			/*_contents[8][0] = new Tile(8, 0, "Enter");
+			for (int c=1; c<COLS-1; c++) {
+				_contents[8][c] = new Tile(8, c, "------");
+			}
+			_contents[8][7] = new Tile(8, 7, "Exit");
+			*/
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 			for (int r=0; r<ROWS-1; r++) {
 				for (int c=0; c<COLS; c++) {
 					int x = c * CELL_SIZE;
 					int y = r * CELL_SIZE;
 					String text = _puzzleModel.getStorageNumber(r, c);
 					if (text != null) {
+<<<<<<< HEAD
 						if( _puzzleModel._contents[r][c].getJustLeft()==true){
 							_puzzleModel._contents[r][c].setJustLeft(false);
 							g.setColor(Color.green);					
@@ -162,6 +172,9 @@ class SlidePuzzleGUI extends JPanel {
 							g.drawString(text, x + 20, y + (3 * CELL_SIZE) / 4);
 							
 						} else if(_puzzleModel.getSpotTaken(r, c)){
+=======
+						if(_puzzleModel.getSpotTaken(r, c)){
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 							g.setColor(Color.red);					
 							g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);						
 							g.setColor(Color.black);						
@@ -179,11 +192,19 @@ class SlidePuzzleGUI extends JPanel {
 				}
 			}
 			// paints ENTRY square
+<<<<<<< HEAD
 			g.setColor(Color.cyan);
 			g.fillRect(2, (5 * CELL_SIZE) + 2, CELL_SIZE - 4, CELL_SIZE - 4);
 			g.setColor(Color.black);
 			g.setFont(_biggerFont);
 			g.drawString(_puzzleModel.getStorageNumber(5, 0), 20, (5 * CELL_SIZE) + (3 * CELL_SIZE) / 4);
+=======
+			g.setColor(Color.darkGray);
+			g.fillRect(2, (5*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
+			g.setColor(Color.black);
+			g.setFont(_biggerFont);
+			g.drawString(_puzzleModel.getStorageNumber(5, 0), 20, (5*CELL_SIZE)+(3*CELL_SIZE)/4);
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 			
 			// paints walls in bottom row
 			for (int c=1; c<COLS-1; c++) {
@@ -195,12 +216,20 @@ class SlidePuzzleGUI extends JPanel {
 				}
 			}
 			// paints EXIT square
+<<<<<<< HEAD
 			g.setColor(Color.cyan);
 			g.fillRect(4 * CELL_SIZE + 2, (5 * CELL_SIZE) + 2, CELL_SIZE - 4, CELL_SIZE - 4);
 			g.setColor(Color.black);
 			g.setFont(_biggerFont);
 			g.drawString(_puzzleModel.getStorageNumber(5, 4), (4 * CELL_SIZE) + 20,
 					(5 * CELL_SIZE) + (3 * CELL_SIZE) / 4);
+=======
+			g.setColor(Color.darkGray);
+			g.fillRect(4*CELL_SIZE+2, (5*CELL_SIZE)+2, CELL_SIZE-4, CELL_SIZE-4);
+			g.setColor(Color.black);
+			g.setFont(_biggerFont);
+			g.drawString(_puzzleModel.getStorageNumber(5, 4), (4*CELL_SIZE)+20, (5*CELL_SIZE)+(3*CELL_SIZE)/4);
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 		}//end paintComponent
 		//toggles whether or not clicking a given platform gives you information
 		public void toggleGetInfo() {
@@ -258,6 +287,7 @@ class SlidePuzzleGUI extends JPanel {
 	            toggleGetInfo();
 	            if (stillRunning == false) {
 	            }
+<<<<<<< HEAD
 			} 
 //            else {
 //				if(col == 4 && row == 4){
@@ -318,6 +348,155 @@ class SlidePuzzleGUI extends JPanel {
 //			EntranceGUI.showTextFieldDemo();
 //				
 //			}
+=======
+			} else {
+				if(col == 4 && row == 4){
+					// done
+				}else if(_puzzleModel._emptyTile.getCol()>col){
+					for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						
+						}
+						for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+							_puzzleModel.moveTileNorth();
+							_puzzleGraphics.repaint();
+						}
+						for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+						}
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						for (int i = 0;i<3-col;i++){
+							_puzzleModel.moveTileNorth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileEast();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileEast();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileSouth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileWest();
+							_puzzleGraphics.repaint();
+							}
+				} else if (col == 4) {
+					for (int i = _puzzleModel._emptyTile.getCol();i<col;i++){
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						}
+					for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+					}
+					for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+						}
+//				} else if (col == 0) {
+//					for (int i = _puzzleModel._emptyTile.getCol();i>=col;i--){
+//						_puzzleModel.moveTileWest();
+//						_puzzleGraphics.repaint();
+//						}
+//					for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+//						_puzzleModel.moveTileNorth();
+//						_puzzleGraphics.repaint();
+//					}
+//					for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+//						_puzzleModel.moveTileEast();
+//						_puzzleGraphics.repaint();
+//						_puzzleModel.moveTileSouth();
+//						_puzzleGraphics.repaint();
+//						_puzzleModel.moveTileSouth();
+//						_puzzleGraphics.repaint();
+//						_puzzleModel.moveTileWest();
+//						_puzzleGraphics.repaint();
+//						_puzzleModel.moveTileNorth();
+//						_puzzleGraphics.repaint();
+//						}
+//					for (int i = 0;i<3-col;i++){
+//						_puzzleModel.moveTileNorth();
+//						_puzzleGraphics.repaint();
+//						_puzzleModel.moveTileEast();
+//						_puzzleGraphics.repaint();
+//						_puzzleModel.moveTileEast();
+//						_puzzleGraphics.repaint();
+//						_puzzleModel.moveTileSouth();
+//						_puzzleGraphics.repaint();
+//						_puzzleModel.moveTileWest();
+//						_puzzleGraphics.repaint();
+//						}
+					
+				} else {
+				for (int i = _puzzleModel._emptyTile.getCol();i<col;i++){
+					
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				}
+				for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				}
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				for (int i = 0;i<3-col;i++){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					}
+				}
+//			_puzzleModel.getCarSpots(row, col).setColor(Color.blue);
+//				spaces--;
+//				spacesOpen.setText(""+spaces);
+			
+			GUI EntranceGUI = new GUI(MetaGUI.slidePuzzle);
+			EntranceGUI.showTextFieldDemo();
+				
+			}
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 			if (canForceCarLeave == true) {
 				
 	            String setAsInfoDumpText = "Platform No: " + _puzzleModel.getStorageNumber(row, col) +
@@ -357,6 +536,7 @@ class SlidePuzzleGUI extends JPanel {
 							// done
 						}else if(_puzzleModel._emptyTile.getCol()>c){
 							for (int i = _puzzleModel._emptyTile.getCol();i>c;i--){
+<<<<<<< HEAD
 								mW();
 								
 								}
@@ -385,10 +565,105 @@ class SlidePuzzleGUI extends JPanel {
 								
 								}
 
+=======
+								_puzzleModel.moveTileWest();
+								_puzzleGraphics.repaint();
+								
+								}
+								for (int i = _puzzleModel._emptyTile.getRow();i>r;i--){
+									_puzzleModel.moveTileNorth();
+									_puzzleGraphics.repaint();
+								}
+								for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+								_puzzleModel.moveTileEast();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileWest();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileNorth();
+								_puzzleGraphics.repaint();
+								}
+								_puzzleModel.moveTileEast();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileWest();
+								_puzzleGraphics.repaint();
+								for (int i = 0;i<3-c;i++){
+									_puzzleModel.moveTileNorth();
+									_puzzleGraphics.repaint();
+									_puzzleModel.moveTileEast();
+									_puzzleGraphics.repaint();
+									_puzzleModel.moveTileEast();
+									_puzzleGraphics.repaint();
+									_puzzleModel.moveTileSouth();
+									_puzzleGraphics.repaint();
+									_puzzleModel.moveTileWest();
+									_puzzleGraphics.repaint();
+									}
+						} else if (c == 4) {
+							for (int i = _puzzleModel._emptyTile.getCol();i<c;i++){
+								_puzzleModel.moveTileEast();
+								_puzzleGraphics.repaint();
+								}
+							for (int i = _puzzleModel._emptyTile.getRow();i>r;i--){
+								_puzzleModel.moveTileNorth();
+								_puzzleGraphics.repaint();
+							}
+							for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+								_puzzleModel.moveTileWest();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileSouth();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileEast();
+								_puzzleGraphics.repaint();
+								_puzzleModel.moveTileNorth();
+								_puzzleGraphics.repaint();
+								}
+//						} else if (col == 0) {
+//							for (int i = _puzzleModel._emptyTile.getCol();i>=col;i--){
+//								_puzzleModel.moveTileWest();
+//								_puzzleGraphics.repaint();
+//								}
+//							for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+//								_puzzleModel.moveTileNorth();
+//								_puzzleGraphics.repaint();
+//							}
+//							for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+//								_puzzleModel.moveTileEast();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileSouth();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileSouth();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileWest();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileNorth();
+//								_puzzleGraphics.repaint();
+//								}
+//							for (int i = 0;i<3-col;i++){
+//								_puzzleModel.moveTileNorth();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileEast();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileEast();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileSouth();
+//								_puzzleGraphics.repaint();
+//								_puzzleModel.moveTileWest();
+//								_puzzleGraphics.repaint();
+//								}
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 							
 						} else {
 						for (int i = _puzzleModel._emptyTile.getCol();i<c;i++){
 							
+<<<<<<< HEAD
 						mE();
 						}
 						for (int i = _puzzleModel._emptyTile.getRow();i>r;i--){
@@ -403,6 +678,44 @@ class SlidePuzzleGUI extends JPanel {
 						for (int i = 0;i<3-c;i++){
 							rNEESW();
 							
+=======
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						}
+						for (int i = _puzzleModel._emptyTile.getRow();i>r;i--){
+							_puzzleModel.moveTileNorth();
+							_puzzleGraphics.repaint();
+						}
+						for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+						}
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						for (int i = 0;i<3-c;i++){
+							_puzzleModel.moveTileNorth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileEast();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileEast();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileSouth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileWest();
+							_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 							}
 						}
 						
@@ -502,8 +815,13 @@ class SlidePuzzleGUI extends JPanel {
 	
 	public void removeCar(int row, int col){
 		
+<<<<<<< HEAD
 		mS();
 		mS();
+=======
+		_puzzleModel.moveTileSouth();
+		_puzzleModel.moveTileSouth();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 			
 		if(row == 4 && col == 0){
 		// in spot needed do nothing	
@@ -513,6 +831,7 @@ class SlidePuzzleGUI extends JPanel {
 			// blank above same col
 			if(_puzzleModel._emptyTile.getRow()<row&&_puzzleModel._emptyTile.getCol()==0){
 				for(int i = _puzzleModel._emptyTile.getRow();i<row+1;i++){
+<<<<<<< HEAD
 					mS();
 				}
 				
@@ -526,10 +845,44 @@ class SlidePuzzleGUI extends JPanel {
 				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
 					rESSWN();
 					
+=======
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+				}
+				
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				// blank under same colom
+			} else if (_puzzleModel._emptyTile.getRow()>row&&_puzzleModel._emptyTile.getCol()==0){
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 				}
 				// blank over to right
 			} else if (_puzzleModel._emptyTile.getRow()<row&&_puzzleModel._emptyTile.getCol()>0){
 				for(int i = _puzzleModel._emptyTile.getCol();i>col+1;i--){
+<<<<<<< HEAD
 					mW();
 				}
 				for(int i = _puzzleModel._emptyTile.getRow();i<row+1;i++){
@@ -540,10 +893,35 @@ class SlidePuzzleGUI extends JPanel {
 				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
 					rESSWN();
 					
+=======
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+				}
+				for(int i = _puzzleModel._emptyTile.getRow();i<row+1;i++){
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+				}
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 				}
 				// blank under to right
 			} else if (_puzzleModel._emptyTile.getRow()<row&&_puzzleModel._emptyTile.getCol()>0){
 				for(int i = _puzzleModel._emptyTile.getCol();i>col+1;i--){
+<<<<<<< HEAD
 					mW();
 				}
 				for(int i = _puzzleModel._emptyTile.getRow();i>row+1;i--){
@@ -567,11 +945,60 @@ class SlidePuzzleGUI extends JPanel {
 				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
 					rESSWN();
 					
+=======
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+				}
+				for(int i = _puzzleModel._emptyTile.getRow();i>row+1;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				//blank same row to the right
+			} else if (_puzzleModel._emptyTile.getRow()==row&&_puzzleModel._emptyTile.getCol()>0){
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				for(int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+				}
+				
+			
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				for(int i =3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 				}
 				
 			}
 		} else if(_puzzleModel._emptyTile.getCol()>col&& row==4){
 			for(int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+<<<<<<< HEAD
 				mS();
 			}
 			for(int i = _puzzleModel._emptyTile.getCol();i>col+1;i--){
@@ -580,6 +1007,26 @@ class SlidePuzzleGUI extends JPanel {
 			for(int i = _puzzleModel._emptyTile.getCol()-1;i>0;i--){
 				rNWWSE();
 				
+=======
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+			}
+			for(int i = _puzzleModel._emptyTile.getCol();i>col+1;i--){
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+			}
+			for(int i = _puzzleModel._emptyTile.getCol()-1;i>0;i--){
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 			}
 //		} 
 //		else if (_puzzleModel._emptyTile.getCol()<col&& row==4){
@@ -590,6 +1037,7 @@ class SlidePuzzleGUI extends JPanel {
 			// blank under
 			if(_puzzleModel._emptyTile.getRow()>row){
 				for(int i = _puzzleModel._emptyTile.getRow(); i>row+1;i--){
+<<<<<<< HEAD
 					mN();
 				}
 				for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
@@ -628,6 +1076,94 @@ class SlidePuzzleGUI extends JPanel {
 				for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
 					rNWWSE();
 					
+=======
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					
+					}
+				for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = 3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					}
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				
+				for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+				}
+			} else if(_puzzleModel._emptyTile.getRow()<=row){
+				for(int i = _puzzleModel._emptyTile.getRow();i<row+1;i++){
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+				}
+				for(int i = _puzzleModel._emptyTile.getCol();i<col;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+				}
+				_puzzleModel.moveTileNorth();
+				_puzzleGraphics.repaint();
+				for(int i = 3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				
+				for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 				}
 				
 				
@@ -635,6 +1171,7 @@ class SlidePuzzleGUI extends JPanel {
 				// blank under
 				if(_puzzleModel._emptyTile.getRow()>row){
 					for(int i = _puzzleModel._emptyTile.getRow(); i>row+1;i--){
+<<<<<<< HEAD
 						mN();
 					}
 					for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
@@ -654,11 +1191,56 @@ class SlidePuzzleGUI extends JPanel {
 					for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
 						rNWWSE();
 						
+=======
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+					}
+					for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						
+						}
+					for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+					}
+					for (int i = 3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+						}
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					
+					for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
+						_puzzleModel.moveTileNorth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 					}
 				
 			// blank over or same row	
 			}  else if (_puzzleModel._emptyTile.getCol()<=col){
 				for(int i = _puzzleModel._emptyTile.getRow(); i<row+1;i++){
+<<<<<<< HEAD
 					mS();
 				}
 				for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
@@ -678,33 +1260,133 @@ class SlidePuzzleGUI extends JPanel {
 				for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
 					rNWWSE();
 					
+=======
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = _puzzleModel._emptyTile.getCol();i>col;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					
+					}
+				for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+				}
+				for (int i = 3 - _puzzleModel._emptyTile.getRow();i>0;i--){
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					}
+				_puzzleModel.moveTileWest();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+				_puzzleModel.moveTileEast();
+				_puzzleGraphics.repaint();
+				
+				for (int i = _puzzleModel._emptyTile.getCol() - 1; i>0;i--){
+					_puzzleModel.moveTileNorth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileWest();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileSouth();
+					_puzzleGraphics.repaint();
+					_puzzleModel.moveTileEast();
+					_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 				}
 				
 			}
 			
 			
+<<<<<<< HEAD
 		
+=======
+				
+				
+//				for (int i = 0;i<3-col;i++){
+//					_puzzleModel.moveTileNorth();
+//					_puzzleGraphics.repaint();
+//					_puzzleModel.moveTileWest();
+//					_puzzleGraphics.repaint();
+//					_puzzleModel.moveTileWest();
+//					_puzzleGraphics.repaint();
+//					_puzzleModel.moveTileSouth();
+//					_puzzleGraphics.repaint();
+//					_puzzleModel.moveTileEast();
+//					_puzzleGraphics.repaint();
+//					}
+//		} else if (col == 0) {
+//			for (int i = _puzzleModel._emptyTile.getCol();i<col;i++){
+//				_puzzleModel.moveTileEast();
+//				_puzzleGraphics.repaint();
+//				}
+//			for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+//				_puzzleModel.moveTileNorth();
+//				_puzzleGraphics.repaint();
+//			}
+//			for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+//				_puzzleModel.moveTileEast();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileSouth();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileSouth();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileWest();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileNorth();
+//				_puzzleGraphics.repaint();
+//				}
+//
+//			
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 		} else {
 		// blank square to the left
 			
 			//move tile down
 			for(int r =_puzzleModel._emptyTile.getRow(); r<4;r++){
+<<<<<<< HEAD
 				mS();
+=======
+				_puzzleModel.moveTileSouth();
+				_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 			}
 			
 		// move blank to the right
 		for (int i = _puzzleModel._emptyTile.getCol();i<col;i++){
 			
+<<<<<<< HEAD
 		mE();
 		}
 		// move blank up to where desiered square is 
 		for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
 			mN();
+=======
+		_puzzleModel.moveTileEast();
+		_puzzleGraphics.repaint();
+		}
+		// move blank up to where desiered square is 
+		for (int i = _puzzleModel._emptyTile.getRow();i>row;i--){
+			_puzzleModel.moveTileNorth();
+			_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 		}
 //		if(row == 4 && col == 4){
 		if(row == 4){
 			// on right
 			for (int i = col-1;i>0;i--){
+<<<<<<< HEAD
 				rNWWSE();
 			
 			}
@@ -716,6 +1398,92 @@ class SlidePuzzleGUI extends JPanel {
 						for (int i = col -1;i>0;i--){
 							rNWWSE();
 							
+=======
+			_puzzleModel.moveTileNorth();
+			_puzzleGraphics.repaint();
+			_puzzleModel.moveTileWest();
+			_puzzleGraphics.repaint();
+			_puzzleModel.moveTileWest();
+			_puzzleGraphics.repaint();
+			_puzzleModel.moveTileSouth();
+			_puzzleGraphics.repaint();
+			_puzzleModel.moveTileEast();
+			_puzzleGraphics.repaint();
+			}
+//		} else if(row == 4 && col ==5){
+//			_puzzleModel.moveTileWest();
+//			_puzzleGraphics.repaint();
+//			_puzzleModel.moveTileSouth();
+//			_puzzleGraphics.repaint();
+//			_puzzleModel.moveTileEast();
+//			_puzzleGraphics.repaint();
+//			for (int i = _puzzleModel._emptyTile.getCol();i>1;i--){
+//				_puzzleModel.moveTileNorth();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileWest();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileWest();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileSouth();
+//				_puzzleGraphics.repaint();
+//				_puzzleModel.moveTileEast();
+//				_puzzleGraphics.repaint();
+//				}
+//			
+//		}
+			
+			
+		
+//		for (int i = _puzzleModel._emptyTile.getRow();i<3;i++){
+//		_puzzleModel.moveTileWest();
+//		_puzzleGraphics.repaint();
+//		_puzzleModel.moveTileSouth();
+//		_puzzleGraphics.repaint();
+//		_puzzleModel.moveTileSouth();
+//		_puzzleGraphics.repaint();
+//		_puzzleModel.moveTileEast();
+//		_puzzleGraphics.repaint();
+//		_puzzleModel.moveTileNorth();
+//		_puzzleGraphics.repaint();
+//		}
+//		_puzzleModel.moveTileWest();
+//		_puzzleGraphics.repaint();
+//		_puzzleModel.moveTileSouth();
+//		_puzzleGraphics.repaint();
+//		_puzzleModel.moveTileEast();
+//		_puzzleGraphics.repaint();
+//		for (int i = 0;i<3-col;i++){
+//			_puzzleModel.moveTileNorth();
+//			_puzzleGraphics.repaint();
+//			_puzzleModel.moveTileWest();
+//			_puzzleGraphics.repaint();
+//			_puzzleModel.moveTileWest();
+//			_puzzleGraphics.repaint();
+//			_puzzleModel.moveTileSouth();
+//			_puzzleGraphics.repaint();
+//			_puzzleModel.moveTileEast();
+//			_puzzleGraphics.repaint();
+//			}
+		} else if (row!=4) {
+			// to the top
+						_puzzleModel.moveTileWest();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileSouth();
+						_puzzleGraphics.repaint();
+						_puzzleModel.moveTileEast();
+						_puzzleGraphics.repaint();
+						for (int i = col -1;i>0;i--){
+							_puzzleModel.moveTileNorth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileWest();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileWest();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileSouth();
+							_puzzleGraphics.repaint();
+							_puzzleModel.moveTileEast();
+							_puzzleGraphics.repaint();
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 							}
 		}
 		}
@@ -724,7 +1492,10 @@ class SlidePuzzleGUI extends JPanel {
 			spaces++;
 			spacesOpen.setText(""+spaces);
 			_puzzleModel.restoreDefaults(4, 0);
+<<<<<<< HEAD
 			_puzzleModel._contents[4][0].setJustLeft(true);
+=======
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 			_puzzleGraphics.repaint();
 		}
 	}
@@ -744,6 +1515,7 @@ class SlidePuzzleGUI extends JPanel {
 		
 	}
 	
+<<<<<<< HEAD
 	public void rNWWSE(){
 		_puzzleModel.moveTileNorth();
 		_puzzleGraphics.repaint();
@@ -852,4 +1624,6 @@ class SlidePuzzleGUI extends JPanel {
 	}
 
 	
+=======
+>>>>>>> 7fea0644fbaa65ded3d3d176e95644aa0909e140
 }//end class SlidePuzzleGUI
