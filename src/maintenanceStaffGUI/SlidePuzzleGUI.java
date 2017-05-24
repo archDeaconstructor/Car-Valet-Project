@@ -158,7 +158,15 @@ class SlidePuzzleGUI extends JPanel {
 					int y = r * CELL_SIZE;
 					String text = _puzzleModel.getStorageNumber(r, c);
 					if (text != null) {
-						if(_puzzleModel.getSpotTaken(r, c)){
+						if(_puzzleModel._contents[r][c].getJustLeft()==true){
+							_puzzleModel._contents[r][c].setJustLeft(false);
+							g.setColor(Color.green);					
+							g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);						
+							g.setColor(Color.black);						
+							g.setFont(_biggerFont);						
+							g.drawString(text, x + 20, y + (3 * CELL_SIZE) / 4);
+							
+						}else if(_puzzleModel.getSpotTaken(r, c)){
 							g.setColor(Color.red);					
 							g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);						
 							g.setColor(Color.black);						
@@ -1162,6 +1170,7 @@ class SlidePuzzleGUI extends JPanel {
 			spaces++;
 			spacesOpen.setText(""+spaces);
 			_puzzleModel.restoreDefaults(4, 0);
+			_puzzleModel._contents[4][0].setJustLeft(true);
 			_puzzleGraphics.repaint();
 		}
 	}

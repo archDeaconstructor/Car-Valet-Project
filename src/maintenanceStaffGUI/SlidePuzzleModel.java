@@ -9,7 +9,7 @@ class SlidePuzzleModel {
 	private static final int ROWS = 6;
 	private static final int COLS = 5;
 	
-	private CarSpots[][] _contents;  // All tiles.
+	CarSpots[][] _contents;  // All tiles.
 	CarSpots     _emptyTile = new CarSpots(4, 0, " ", "N/A"); // The empty space.
 	
 	
@@ -171,6 +171,7 @@ class SlidePuzzleModel {
 		private String _storageNumber;  // string to display for identification
 		private String _name; // name from other source
 		boolean _spotTaken; // is there a car?
+		boolean _justLeft;
 		private int _hours; // time from other source
 		private int _minutes; // time from other source
 		private String _dateInit; // time the vehicle was given to us
@@ -181,6 +182,7 @@ class SlidePuzzleModel {
 			_col = col;
 			_storageNumber = storageNumber;
 			_spotTaken = false;
+			_justLeft = false;
 			_name = name;
 			_hours = 0;
 			_minutes = 0;
@@ -193,6 +195,14 @@ class SlidePuzzleModel {
 		//======================================================== getCol
 		public int getCol() {
 			return _col;
+		}//end getCol
+		
+		public void setJustLeft(boolean justLeft) {
+			this._justLeft = justLeft;
+		}//end setCol
+		//======================================================== getCol
+		public boolean getJustLeft() {
+			return _justLeft;
 		}//end getCol
 		//======================================================== setRow
 		public void setRow(int delta) {

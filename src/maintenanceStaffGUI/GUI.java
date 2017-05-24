@@ -173,7 +173,7 @@ public class GUI {
 		controlPanel.add(nameLabel);
 		controlPanel.add(userText);
 		// controlPanel.add(switchAdmin);
-		controlPanel.add(switchParking);
+//		controlPanel.add(switchParking);
 		controlPanel.add(parkButton);
 		mainFrame.setVisible(true);
 		return (timeNumber + " " + timeTag);
