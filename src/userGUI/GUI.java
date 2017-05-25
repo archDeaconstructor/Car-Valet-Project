@@ -1,19 +1,30 @@
 package userGUI;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Date;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-import parkingvisuals.createvisuals;
-import parkingvisuals.createwindow;
+import carParking.UserInformationForParking;
  
 public class GUI {
-   public JFrame mainFrame;
-   public JLabel headerLabel;
-   public JLabel statusLabel;
-   public JPanel controlPanel;
+   private JFrame mainFrame;
+   private JLabel headerLabel;
+   private JLabel statusLabel;
+   private JPanel controlPanel;
+   
+   private JFrame payFrame;
+   private JLabel payHeader;
+   private JPanel payPanel;
+   UserInformationForParking parseInfo = new UserInformationForParking();
   
 
    public GUI(){
@@ -47,60 +58,80 @@ public class GUI {
    }
    public void showTextFieldDemo(){ 
 
+	 //Menu starts with enter your info
       JLabel  namelabel= new JLabel("User CC Info: ", JLabel.RIGHT);
-      final JTextField userCC = new JTextField(16);
+      final JTextField userText = new JTextField(16);   
+   
+      //pull up a car spot at one point
+      //save info on that card spot
       
-      JButton fiveButton = new JButton("Five Mins");
-      fiveButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-        	  Date arrival = new Date();
-              String duration = "5 minutes";
-             String time = "User selected 5 Minutes";
-             
-          }
-       });
-      JButton tenButton = new JButton("10 Minutes");
-      tenButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {     
-        	  Date arrival = new Date();
-              String duration = "10 minutes";
-             String time = "User selected 10 Minutes";
-          }
-       });
-      
-      JButton dayButton = new JButton("All Day");
-      dayButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {     
-        	  Date arrival = new Date();
-              String duration = "All Day";
-             String time = "User selected All Day";
-             JFrame window = new JFrame("Parking Valet");
-             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-             window.setContentPane(new createvisuals());
-             window.pack(); 
-             window.show();  
-             window.setResizable(false);
-          }
-       });
+      JButton switchAdmin = new JButton("Admin");
+      switchAdmin.addActionListener(new ActionListener(){
+    	 public void actionPerformed(ActionEvent e){
+    		//switch to admin page
+			 mainFrame.setVisible(false);
+			 mainFrame.dispose();
+			 
+			 
+			 //create a parking controller class?
+    	 }
+      });
+      JButton switchParking = new JButton("Parking View");
+      switchParking.addActionListener(new ActionListener(){
+     	 public void actionPerformed(ActionEvent e) {
+     		 //switch to parking
+     		 mainFrame.setVisible(false);
+			 mainFrame.dispose();
+			 //goes to parking
+     	 }
+      });
 
+      
       JButton parkButton = new JButton("Continue");
       parkButton.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {     
-            String data = "Credit Card: " + userCC.getText(); 
+         public void actionPerformed(ActionEvent e) {  
+        	String data;
+        	try{
+        		data= "Credit Card: " + parseInfo.returnString(userText.getText());
+        	}catch(StringIndexOutOfBoundsException fix){
+        		data= "Please swipe card";
+        	}
             statusLabel.setText(data);
-            controlPanel.remove(parkButton);
-            controlPanel.add(fiveButton);
-            controlPanel.add(tenButton);
-            controlPanel.add(dayButton);
-            
-            
-            
+            JButton fiveButton = new JButton("Five Mins");
+            parkButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {     
+                   String time = "User All day ";
+                   statusLabel.setText(time); 
+                   controlPanel.add(fiveButton);
+                }
+             });
+            JButton tenButton = new JButton("Half a Day");
+            parkButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {     
+                   String time = "Username " + userText.getText(); 
+                   statusLabel.setText(time);  
+                   controlPanel.add(tenButton);
+                }
+             });
+            JButton dayButton = new JButton("All Day");
+            parkButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {     
+                   String time = "Username " + userText.getText(); 
+                   statusLabel.setText(time); 
+                   controlPanel.add(dayButton);
+                }
+             });
          }
-      });
-      
+      }); 
       controlPanel.add(namelabel);
-      controlPanel.add(userCC);
+      controlPanel.add(userText);
+      controlPanel.add(switchAdmin);
+      controlPanel.add(switchParking);
       controlPanel.add(parkButton);
       mainFrame.setVisible(true);  
+   }
+   
+   public void saveInfo(){
+	   //after a time is picked, save time and member name into car slot from CarSpots.java
    }
 }

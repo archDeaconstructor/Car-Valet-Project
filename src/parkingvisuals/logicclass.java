@@ -1,6 +1,7 @@
 package parkingvisuals;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 class logicclass {
 	 private static final int ROWS = 5;
@@ -22,12 +23,18 @@ class logicclass {
 	 public void reset() {
 	     for (int r=0; r<ROWS; r++) {
 	         for (int c=0; c<COLS; c++) {
-	             _contents[r][c] = new Tile(r, c, "" + (r*COLS+c+1));
+	             _contents[r][c] = new Tile(r, c, "");
 	         }
 	     }
 	     //--- Set tile face to null to mark empty space
 	     _emptyTile = _contents[ROWS-1][COLS-5];
 	     _emptyTile.setFace(null);
+	     _contents[4][4].setFace("NC");
+		
+		
+	     moveTile(3,4);
+	     
+//	     exchangeTiles(4,4,3,4);
 	        
 	 }//end reset
 	 
@@ -39,43 +46,62 @@ class logicclass {
 	 }//end moveTile */
 	 
 	 public boolean moveTile(int r, int c) {
+		 
 		 int emtRow = _emptyTile.getRow();
 		 int emtCol = _emptyTile.getCol();
 		 
 		 if(emtRow<r){
-			 int newRow = emtRow+1;
-			 if(isLegalRowCol(newRow,emtCol)){
-				 exchangeTiles(emtRow,emtCol,newRow,emtCol);
-				 _emptyTile = _contents[newRow][emtCol];
-				 moveTile(r,c);
-			 }
+			 _emptyTile=_contents[emtRow+1][emtCol];
+			 exchangeTiles(emtRow,emtCol,emtRow+1,emtCol);
+			 moveTile(r,c);
+			 
 		 } else if (emtRow>r){
-			 checkEmpty(r, c, -1, 0);
-			 }
+			 _emptyTile=_contents[emtRow-1][emtCol];
+			 exchangeTiles(emtRow,emtCol,emtRow-1,emtCol);
+			 moveTile(r,c);
 		 } else {
 			 if(emtCol<c){
-				 int newCol = emtCol+1;
-				 if(isLegalRowCol(emtRow,newCol)){
-					 exchangeTiles(emtRow,emtCol,emtRow, newCol);
-					 _emptyTile = _contents[emtRow][newCol];
-					 moveTile(r,c);
-				 }
+				 _emptyTile=_contents[emtRow][emtCol+1];
+				 exchangeTiles(emtRow,emtCol,emtRow,emtCol+1);
+				 moveTile(r,c);
 			 } else if (emtCol>c){
-				 int newCol = emtCol-1;
-				 if(isLegalRowCol(emtRow,newCol)){
-					 exchangeTiles(emtRow,emtCol,emtRow,newCol);
-					 _emptyTile = _contents[emtRow][newCol];
-					 moveTile(r,c);
-				 } else {
-					 exchangeTiles(emtRow,emtCol,r,c);
-				 }
-			 }
-		 }
+				 _emptyTile=_contents[emtRow+1][emtCol-1];
+				 exchangeTiles(emtRow,emtCol,emtRow,emtCol-1);
+				 moveTile(r,c);
+			 } else {
+				 return true;
+			}
+		}
+		 return false;
+	}
+	 
+	 public boolean returnTile(int r, int c) {
+		 
+		 int emtRow = _emptyTile.getRow();
+		 int emtCol = _emptyTile.getCol();
+		 
+		 if(emtRow<4){
+			 _emptyTile=_contents[emtRow+1][emtCol];
+			 exchangeTiles(emtRow,emtCol,emtRow+1,emtCol);
+			 returnTile(r,c);
+			 
+		
+		 } else {
+			 if(emtCol>0){
+				 _emptyTile=_contents[emtRow][emtCol-1];
+				 exchangeTiles(emtRow,emtCol,emtRow,emtCol-1);
+				 returnTile(r,c);
+			 
+			 } else {
+				 exchangeTiles(emtRow,emtCol,4,0);
+				 return true;
+			}
+		}
+		 return false;
+	}
 		 
 		 
-	     //--- It's a legal move if the empty cell is next to it.
-	     return checkEmpty(r, c, -1, 0) || checkEmpty(r, c, 1, 0) || checkEmpty(r, c, 0, -1) || checkEmpty(r, c, 0, 1);
-	 }//end moveTile
+	    
 	 
 	 // Check to see if there is an empty position beside tile.
 	 // Return true and exchange if possible, else return false.

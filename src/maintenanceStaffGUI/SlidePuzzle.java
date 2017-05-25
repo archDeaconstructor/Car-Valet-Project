@@ -6,10 +6,15 @@ package maintenanceStaffGUI;
 //   SlidePuzzleGUI.java   - implements the GUI interface.
 //   SlidePuzzleModel.java - the logical functioning.
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
+import javax.swing.Timer;
+
 
 ///////////////////////////////////////////// class SlidePuzzle
-class SlidePuzzle {
+class SlidePuzzle{
     //============================================= method main
 	static SlidePuzzleGUI slidePuzzleGUI = new SlidePuzzleGUI();
 	static JFrame window = new JFrame("Slide Puzzle");
@@ -18,8 +23,19 @@ class SlidePuzzle {
 			slidePuzzleGUI.setCarSpots(4, 4, name, timeNumber, timeTagged, dateInit);
 		}
 	}
+	public void setAlreadyHaveNewArrival() {
+		slidePuzzleGUI.setAlreadyHaveNewArrival();
+	}
 	public int[] findMyCar(String name) {
 		return (slidePuzzleGUI.findMyCar(name));
+	}
+	
+	public void removeCar(int row, int col){
+		//for(int x=0; x<2; x++)
+		slidePuzzleGUI.removeCar(row, col);
+	}
+	public void setEmergencyShutdownVisible(){
+		slidePuzzleGUI.setEmergencyShutdownVisible();
 	}
     public static void main(String[] args) {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

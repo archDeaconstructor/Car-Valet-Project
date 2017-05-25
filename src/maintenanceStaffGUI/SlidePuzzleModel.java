@@ -1,5 +1,6 @@
 package maintenanceStaffGUI;
 
+import javax.swing.JButton;
 
 //SlidePuzzleModel.java - Slide pieces to correct position.
 //Fred Swartz, 2003-May-10
@@ -8,14 +9,24 @@ package maintenanceStaffGUI;
 class SlidePuzzleModel {
 	private static final int ROWS = 6;
 	private static final int COLS = 5;
+	Boolean emergencyShutdownBoolean= false;
 	
-	private CarSpots[][] _contents;  // All tiles.
-	private CarSpots     _emptyTile = new CarSpots(4, 0, " ", "N/A"); // The empty space.
+	public Boolean getEmergencyShutdownBoolean() {
+		return emergencyShutdownBoolean;
+	}
+
+	public void setEmergencyShutdownBoolean(Boolean emergencyShutdownBoolean) {
+		this.emergencyShutdownBoolean = emergencyShutdownBoolean;
+	}
+
+	CarSpots[][] _contents;  // All tiles.
+	CarSpots     _emptyTile = new CarSpots(4, 0, " ", "N/A"); // The empty space.
 	
 	
 	//================================================= constructor
 	public SlidePuzzleModel() {
 		_contents = new CarSpots[ROWS][COLS];
+		emergencyShutdownBoolean = false;
 		reset();               // Initialize and shuffle tiles.
 	}//end constructor
 	
@@ -58,6 +69,8 @@ class SlidePuzzleModel {
 	void setTimeSince(int row, int col, String dateInit) {
 		_contents[row][col].setTimeSince(dateInit);
 	}//end getTimeRemaining
+		
+	
 	boolean isEmptyTile(int row, int col) {
 		if ((_emptyTile._row == row) && (_emptyTile._col) == col) {
 			return true;
@@ -65,7 +78,22 @@ class SlidePuzzleModel {
 			return false;
 		}
 	}
+
+	
+	public int count(){
+		int count = 0;
+		for (int r=0; r<5; r++) {
+			for (int c=0; c<5; c++) {
+				if(_contents[c][r].getSpotTaken()){
+					count++;
+				}
+			}
+		}
+		return count;
 		
+	}
+	
+	
 	//======================================================= reset
 	// Initialize and shuffle the tiles.
 	
@@ -83,6 +111,7 @@ class SlidePuzzleModel {
 			platformCount++;
 		}
 		_contents[5][0] = new CarSpots(5, 0, "Exit", "N/A");
+		_contents[5][1] = new CarSpots(5, 1, ""+count(), "N/A");
 		for (int c=1; c<COLS-1; c++) {
 			_contents[5][c] = new CarSpots(5, c, "Error! This is a wall.", "N/A");
 		}
@@ -97,6 +126,7 @@ class SlidePuzzleModel {
         if (isLegalRowCol(_emptyTile.getRow() -1, _emptyTile.getCol())) {
         	_emptyTile.setRow(-1);
         }
+        
     }//end moveTileNorth.
     public void moveTileSouth() {
     	if (_emptyTile.getRow() + 1 != 5) {
@@ -151,7 +181,8 @@ class SlidePuzzleModel {
 		private int _col;     // col of final position
 		private String _storageNumber;  // string to display for identification
 		private String _name; // name from other source
-		private boolean _spotTaken; // is there a car?
+		boolean _spotTaken; // is there a car?
+		boolean _justLeft;
 		private int _hours; // time from other source
 		private int _minutes; // time from other source
 		private String _dateInit; // time the vehicle was given to us
@@ -162,6 +193,7 @@ class SlidePuzzleModel {
 			_col = col;
 			_storageNumber = storageNumber;
 			_spotTaken = false;
+			_justLeft = false;
 			_name = name;
 			_hours = 0;
 			_minutes = 0;
@@ -174,6 +206,14 @@ class SlidePuzzleModel {
 		//======================================================== getCol
 		public int getCol() {
 			return _col;
+		}//end getCol
+		//======================================================== setJustLeft
+		public void setJustLeft(boolean justLeft) {
+			this._justLeft = justLeft;
+		}//end setJustLeft
+		//======================================================== getJustLeft
+		public boolean getJustLeft() {
+			return _justLeft;
 		}//end getCol
 		//======================================================== setRow
 		public void setRow(int delta) {

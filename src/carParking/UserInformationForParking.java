@@ -1,18 +1,18 @@
-package maintenanceStaffGUI;
+package carParking;
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class UserInformationForParking {
-	/*
+/*
 	public static void main(String[] args){
 		Scanner sc = new Scanner(System.in);
 		String input = sc.next();
 		
-		System.out.print(cardTest(input));
+		System.out.print(returnString(input));
 		
 	}*/
-	String first, last;
+
 	public String returnString(String username){
 		
 				String[] piece1 = username.split(Pattern.quote("^"));
@@ -22,28 +22,14 @@ public class UserInformationForParking {
 				
 				String FullName	  = piece1[1];
 				String[] piece2 = FullName.split(Pattern.quote("/"));
-				first  = piece2[0];
-				last = piece2[1];
+				String firstName  = piece2[0];
+				String lastName   = piece2[1];
 				
-				String Value = cardNumber + " - " + first+" "+last;
+				String Value = cardNumber + " - " + firstName+" "+lastName;
 				
 				//charge with card number
 				//save fullname into members?
 		return Value;
-	}/*
-	public static Boolean cardTest(String username){
-		Boolean pass = false;
-		
-		String value = username;
-		String password = "password";
-		
-		if (value.equals(password))
-		pass = true;
-		else 
-		pass = false;
-		
-		
-		return pass;
-	}*/
+	}
 	
 }
